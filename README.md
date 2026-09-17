@@ -40,6 +40,7 @@ and departments
  
  
 Structured User Stories
+
 As a new student, I want to search for my classroom so that I can easily find where my 
 class is located.
 
