@@ -41,18 +41,25 @@ and departments
  
 Structured User Stories
 As a new student, I want to search for my classroom so that I can easily find where my 
-class is located. 
+class is located.
+
 As a first-year student, I want to view an interactive campus map so that I can 
 understand the location of different buildings. 
+
 As a transferee, I want to search for a department so that I can find the correct office 
 without asking other people for directions. 
+
 As a student, I want to select a building and floor so that I can identify the exact location 
 of my classroom. 
+
 As a student, I want to search for a laboratory so that I can quickly find where my 
 laboratory class will be held. 
+
 As a student, I want to see directions to my destination so that I can reach the correct 
 room efficiently. 
+
 As a student, I want to view the details of a location so that I can confirm the building, 
 floor, and room before going there. 
+
 As a faculty member, I want to search for classrooms and offices so that I can easily 
 locate different facilities on campus
