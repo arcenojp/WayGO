@@ -4,6 +4,7 @@ Overview:
 
 WayGo is a web app that helps students, visitors, and staff find their way around a school with multiple physically separate campuses. Open one dashboard, see every campus on a real map, drill into a campus to see its buildings, and drill into a building to find the right floor and room.
 
+---
 Core Feature List
 1. Interactive Campus Map – Allows students to view and explore the school campus, 
 buildings, and facilities. 
