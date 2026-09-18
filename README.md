@@ -1,4 +1,4 @@
-# WayGO
+# WayGO - Campus Interactive Map and Wayfinding System
 ---
 ## Overview
 
@@ -54,3 +54,5 @@ and departments
 
 ---
 ## System Architecture Diagram
+
+![System architecture diagram](System-Architecture-Diagram.drawio.png)
