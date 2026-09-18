@@ -43,3 +43,11 @@ campus facilities
 Quickly find rooms, offices, 
 and departments
 ---
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React (Vite) + React Router, Tailwind CSS v4, Leaflet / react-leaflet |
+| Map data | OpenStreetMap tiles + hand-traced campus/building GeoJSON |
+| Backend (target) | Node.js + Express (REST API) |
+| Database (target) | PostgreSQL |
