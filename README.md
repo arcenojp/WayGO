@@ -38,11 +38,3 @@ campus facilities
 Quickly find rooms, offices, 
 and departments
  
- 
-
-
-As a student, I want to view the details of a location so that I can confirm the building, 
-floor, and room before going there. 
-
-As a faculty member, I want to search for classrooms and offices so that I can easily 
-locate different facilities on campus
