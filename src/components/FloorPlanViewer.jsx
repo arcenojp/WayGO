@@ -34,11 +34,6 @@ import RouteBanner from "./RouteBanner";
  * user closes the directions or clicks another room.
  */
 
-const center = (polygon) => {
-  const { minX, maxX, minY, maxY } = polygonBounds(polygon);
-  return [(minX + maxX) / 2, (minY + maxY) / 2];
-};
-
 // The next floor on the way from one floor to another, following the stairs
 // (breadth-first, so it takes the fewest flights). Null if unreachable.
 function nextFloorToward(floors, fromId, toId) {
@@ -60,34 +55,26 @@ function nextFloorToward(floors, fromId, toId) {
   return step;
 }
 
-// The stairs on this floor to take toward the target room: one leading to
-// the next floor on the way, closest to where the room is. Staff-only stairs
-// are used only when there's no other way.
-function stairTowards(floors, floor, target) {
+// Every staircase on this floor that leads to the next floor on the way to
+// the target. Staff-only stairs are left out unless there's no other way.
+function stairsTowards(floors, floor, target) {
   const nextId = nextFloorToward(floors, floor.id, target.floorId);
-  if (!nextId) return null;
-  const [rx, ry] = center(target.room.polygon);
-  const distance = (stair) => {
-    const [sx, sy] = center(stair.polygon);
-    return Math.hypot(sx - rx, sy - ry);
-  };
-  const options = floor.stairs
-    .filter((st) => st.toFloorId === nextId)
-    .sort((a, b) => Boolean(a.staffOnly) - Boolean(b.staffOnly) || distance(a) - distance(b));
-  return options[0] || null;
+  const options = floor.stairs.filter((st) => st.toFloorId === nextId);
+  const open = options.filter((st) => !st.staffOnly);
+  return open.length > 0 ? open : options;
 }
 
-// Zooms to a room or stairwell. Must render after ResetViewOnFloorChange so
-// it runs after the floor's fit-to-bounds.
-function FlyToShape({ polygon, focusKey, toLatLng }) {
+// Zooms to the highlighted room or stairwells. Must render after
+// ResetViewOnFloorChange so it runs after the floor's fit-to-bounds.
+function FlyToShapes({ polygons, focusKey, toLatLng }) {
   const map = useMap();
   useEffect(() => {
-    if (!polygon) return;
-    const { minX, maxX, minY, maxY } = polygonBounds(polygon);
+    if (polygons.length === 0) return;
+    const { minX, maxX, minY, maxY } = polygonBounds(polygons.flat());
     const t = setTimeout(() => {
       const isPhone = window.innerWidth < 768;
       map.flyToBounds([toLatLng([minX, maxY]), toLatLng([maxX, minY])], {
-        paddingTopLeft: [40, 80], // room for the directions banner
+        paddingTopLeft: [40, 120], // room for the directions banner and arrows
         paddingBottomRight: [40, 40],
         maxZoom: isPhone ? -1 : -0.25,
         duration: 0.8,
@@ -135,11 +122,12 @@ const stairPulseStyle = {
 };
 
 // Fits the view and pan limits to the current floor whenever it changes.
-function ResetViewOnFloorChange({ floorId, bounds }) {
+function ResetViewOnFloorChange({ floorId, bounds, panBounds }) {
   const map = useMap();
   useEffect(() => {
-    map.setMaxBounds(bounds);
-    map.fitBounds(bounds);
+    map.setMaxBounds(panBounds);
+    // Not animated: a zoom animation still running would undo FlyToShapes.
+    map.fitBounds(bounds, { animate: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [floorId]);
   return null;
@@ -168,6 +156,12 @@ export default function FloorPlanViewer({
   const bounds = [
     [-height, 0],
     [0, width],
+  ];
+  // Panning may go a little above the artwork, so the directions banner
+  // never hides stairs or rooms along its top edge.
+  const panBounds = [
+    [-height, 0],
+    [height * 0.15, width],
   ];
 
   // Image [x, y] -> Leaflet [lat, lng]. y is negated because image y grows
@@ -198,11 +192,11 @@ export default function FloorPlanViewer({
   // on other floors the stairs toward it do.
   const activeTarget = target && target.floorId === floor.id ? target : null;
   const targetFloor = target && floors.find((f) => f.id === target.floorId);
-  const guideStair = target && !activeTarget ? stairTowards(floors, floor, target) : null;
+  const guideStairs = target && !activeTarget ? stairsTowards(floors, floor, target) : [];
   const goingUp = targetFloor && floors.indexOf(targetFloor) > floors.indexOf(floor);
 
-  const focus = activeTarget ? activeTarget.room : guideStair;
-  const arrow = focus ? arrowFor(focus.polygon, toLatLng) : null;
+  const focus = activeTarget ? [activeTarget.room] : guideStairs;
+  const focusKey = `${floor.id}:${focus.map((f) => f.id).join(",")}:${handledKey}`;
 
   useEffect(() => () => clearTimeout(pulseTimeout.current), []);
 
@@ -241,8 +235,11 @@ export default function FloorPlanViewer({
           <RouteBanner onClose={() => setTarget(null)}>
             {activeTarget ? (
               <><strong>{target.room.name}</strong> is here on the {floor.label}.</>
-            ) : guideStair ? (
-              <><strong>{target.room.name}</strong> is on the {targetFloor.label}. Take the highlighted stairs {goingUp ? "up" : "down"}.</>
+            ) : guideStairs.length > 0 ? (
+              <>
+                <strong>{target.room.name}</strong> is on the {targetFloor.label}. Take {guideStairs.length > 1 ? "any of the" : "the"} highlighted
+                stairs {goingUp ? "up" : "down"}.
+              </>
             ) : (
               <><strong>{target.room.name}</strong> is on the {targetFloor.label}. Use the floor buttons above.</>
             )}
@@ -252,7 +249,7 @@ export default function FloorPlanViewer({
         <MapContainer
           crs={L.CRS.Simple}
           bounds={bounds}
-          maxBounds={bounds}
+          maxBounds={panBounds}
           maxBoundsViscosity={1}
           minZoom={-4}
           zoomSnap={0.25}
@@ -260,10 +257,10 @@ export default function FloorPlanViewer({
           style={{ height: "100%", width: "100%", background: C.paperDark }}
         >
           <SyncMapSize height={frameHeight} />
-          <ResetViewOnFloorChange floorId={floorId} bounds={bounds} />
+          <ResetViewOnFloorChange floorId={floorId} bounds={bounds} panBounds={panBounds} />
           <ImageOverlay url={artworkUrls[floor.artworkFile]} bounds={bounds} />
 
-          <FlyToShape polygon={focus?.polygon} focusKey={focus ? `${floor.id}:${focus.id}:${handledKey}` : null} toLatLng={toLatLng} />
+          <FlyToShapes polygons={focus.map((f) => f.polygon)} focusKey={focusKey} toLatLng={toLatLng} />
 
           {floor.rooms.map((room) => {
             const isTarget = activeTarget?.room.id === room.id;
@@ -288,18 +285,14 @@ export default function FloorPlanViewer({
             );
           })}
 
-          {arrow && (
-            <Marker
-              key={`${focus.id}-arrow`}
-              position={arrow.position}
-              icon={arrow.icon}
-              interactive={false}
-            />
-          )}
+          {focus.map((shape) => {
+            const arrow = arrowFor(shape.polygon, toLatLng);
+            return <Marker key={`${shape.id}-arrow`} position={arrow.position} icon={arrow.icon} interactive={false} />;
+          })}
 
           {floor.stairs.map((stair) => {
             const isPulsing = arrivedGroup === stair.group;
-            const isGuide = guideStair?.id === stair.id;
+            const isGuide = guideStairs.includes(stair);
             const style = isGuide ? targetStyle : isPulsing ? stairPulseStyle : stairStyle;
             return (
               <Polygon

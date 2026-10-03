@@ -5,8 +5,8 @@
 //
 // Notes on the source artwork:
 // - A stray hallway-sized shape that appears on every floor was left out.
-// - Floor 2's bottom staircase is labeled "1st Floor", but floor 1 has no
-//   matching landing.
+// - Floor 1 is drawn about 100px further left than floors 2 and 3; each
+//   floor's polygons match its own artwork.
 
 export const COMPUTER_BUILDING_ARTWORK_SIZE = { width: 1440, height: 1727 };
 
@@ -19,49 +19,49 @@ export const COMPUTER_BUILDING_FLOORS = [
       {
         id: "cb1_compe__it_faculty_room_1",
         name: "CompE/ IT Faculty Room",
-        polygon: [[797.5, 1246.5], [1325.5, 1246.5], [1325.5, 1494.5], [797.5, 1494.5]],
+        polygon: [[695.5, 1239.5], [1223.5, 1239.5], [1223.5, 1487.5], [791, 1487.5], [791, 1581], [695.5, 1581]],
         photos: [],
       },
       {
         id: "cb1_cb_12_2",
         name: "CB-12",
-        polygon: [[797.5, 825.5], [1325.5, 825.5], [1325.5, 1241.5], [797.5, 1241.5]],
+        polygon: [[695.5, 818.5], [1223.5, 818.5], [1223.5, 1234.5], [695.5, 1234.5]],
         photos: [],
       },
       {
         id: "cb1_cb_14_3",
         name: "CB-14",
-        polygon: [[797.5, 222.5], [1325.5, 222.5], [1325.5, 656.5], [797.5, 656.5]],
+        polygon: [[695.5, 215.5], [1223.5, 215.5], [1223.5, 649.5], [695.5, 649.5]],
         photos: [],
       },
       {
         id: "cb1_computer_custodian_office_4",
         name: "Computer Custodian Office",
-        polygon: [[938.5, 661.5], [1325.5, 661.5], [1325.5, 820.5], [938.5, 820.5]],
+        polygon: [[836.5, 654.5], [1223.5, 654.5], [1223.5, 813.5], [836.5, 813.5]],
         photos: [],
       },
       {
         id: "cb1_it_laboratory_5",
         name: "IT Laboratory",
-        polygon: [[129.5, 688.5], [619.5, 688.5], [619.5, 1150.5], [129.5, 1150.5]],
+        polygon: [[23.5, 702.5], [513.5, 702.5], [513.5, 1164.5], [23.5, 1164.5]],
         photos: [],
       },
       {
         id: "cb1_microprocessor_laboratory_6",
         name: "Microprocessor Laboratory",
-        polygon: [[129.5, 222.5], [619.5, 222.5], [619.5, 683.5], [129.5, 683.5]],
+        polygon: [[23.5, 236.5], [513.5, 236.5], [513.5, 697.5], [23.5, 697.5]],
         photos: [],
       },
       {
         id: "cb1_cr_female_7",
         name: "CR FEMALE",
-        polygon: [[385.5, 87.5], [619.5, 87.5], [619.5, 182.5], [385.5, 182.5]],
+        polygon: [[279.5, 101.5], [513.5, 101.5], [513.5, 196.5], [279.5, 196.5]],
         photos: [],
       },
       {
         id: "cb1_cr_male_8",
         name: "CR MALE",
-        polygon: [[128.5, 87.5], [362.5, 87.5], [362.5, 182.5], [128.5, 182.5]],
+        polygon: [[22.5, 101.5], [256.5, 101.5], [256.5, 196.5], [22.5, 196.5]],
         photos: [],
       },
     ],
@@ -70,7 +70,14 @@ export const COMPUTER_BUILDING_FLOORS = [
         id: "cb1_stair_top_to2",
         name: "Main Stairs (to Floor 2)",
         group: "top",
-        polygon: [[908.5, 108.5], [1325.5, 108.5], [1325.5, 204.5], [908.5, 204.5]],
+        polygon: [[802.5, 101.5], [1219.5, 101.5], [1219.5, 197.5], [802.5, 197.5]],
+        toFloorId: "floor2",
+      },
+      {
+        id: "cb1_stair_bottom_to2",
+        name: "Secondary Stairs (to Floor 2)",
+        group: "bottom",
+        polygon: [[789.5, 1485.5], [1232.5, 1485.5], [1232.5, 1581.5], [789.5, 1581.5]],
         toFloorId: "floor2",
       },
     ],
