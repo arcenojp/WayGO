@@ -31,7 +31,7 @@ import RouteBanner from "./RouteBanner";
  *
  * A searched room gets a bouncing arrow and a pulsing glow. On any other
  * floor, the stairs leading toward it are highlighted instead, until the
- * user closes the directions or clicks another room.
+ * user taps the room, another room, or closes the directions.
  */
 
 // The next floor on the way from one floor to another, following the stairs
@@ -299,7 +299,8 @@ export default function FloorPlanViewer({
                 eventHandlers={{
                   add: isTarget ? addClass("waygo-heartbeat") : undefined,
                   click: () => {
-                    if (!isTarget) setTarget(null);
+                    // Tapping the destination (or any other room) ends the directions.
+                    setTarget(null);
                     onRoomSelect({ ...room, floorLabel: floor.label, buildingName });
                   },
                   mouseover: (e) => !isTarget && e.target.setStyle(roomHoverStyle),

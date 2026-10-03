@@ -107,6 +107,8 @@ export default function CampusPage() {
                   navigate(route.next.path, { state: { ...route.next.state, guide: true } });
                 } else if (building?.imageOnly) {
                   setSelectedBuilding({ id: buildingId, ...building });
+                  // A photo-only building is the end of the route.
+                  if (route?.buildingId === buildingId) navigate(location.pathname, { replace: true });
                 } else {
                   navigate(`/campus/${campusId}/building/${buildingId}`);
                 }
