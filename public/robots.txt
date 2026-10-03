@@ -1,0 +1,10 @@
+# Google and Bing may load pages only to read the noindex tag and drop them
+# from search results. Every other crawler is blocked.
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: *
+Disallow: /
