@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+/* Keep in sync with src/theme.js */
+:root {
+  --brand: #C331C1;
+  --brand-dark: #8E1F8C;
+  --brand-tint: #F8E7F7;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--brand-tint);
+  color: var(--brand-dark);
+}
+
+/* Search box focus ring */
+.waygo-search:focus-within {
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 0 3px var(--brand-tint);
+}
+.waygo-search input:focus-visible {
+  outline: none;
+}
+
+/* Hover tint for floor buttons and the back button */
+.waygo-hover-tint:hover {
+  background: var(--brand-tint);
+}
