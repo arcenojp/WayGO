@@ -264,14 +264,16 @@ export default function FloorPlanViewer({
 
           {floor.rooms.map((room) => {
             const isTarget = activeTarget?.room.id === room.id;
-            // Leaflet only applies className on creation, so the target gets a
-            // separate key to remount with the heartbeat class.
+            // The target gets its own key so it remounts, and the heartbeat
+            // class is added once the shape is on the map (Leaflet ignores
+            // className changes after a shape is drawn).
             return (
               <Polygon
                 key={isTarget ? `${room.id}-target` : room.id}
                 positions={room.polygon.map(toLatLng)}
                 pathOptions={isTarget ? targetStyle : roomStyle}
                 eventHandlers={{
+                  add: (e) => isTarget && e.target.getElement()?.classList.add("fpv-heartbeat"),
                   click: () => {
                     if (!isTarget) setTarget(null);
                     onRoomSelect({ ...room, floorLabel: floor.label, buildingName });
