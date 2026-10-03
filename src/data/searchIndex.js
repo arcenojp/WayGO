@@ -1,4 +1,5 @@
 import { CAMPUSES } from "./campuses";
+import { hasRoute } from "./rtsWalkways";
 
 function buildIndex() {
   const index = [];
@@ -25,11 +26,14 @@ function buildIndex() {
       });
     } else {
       Object.entries(campus.buildings).forEach(([buildingId, building]) => {
+        // RTS results show walking directions on the campus map first.
+        const via = campusId === "rts" && hasRoute(buildingId) ? { campusPath: `/campus/${campusId}`, buildingId } : undefined;
         index.push({
           kind: "building",
           label: building.name,
           sublabel: campus.name,
           path: `/campus/${campusId}/building/${buildingId}`,
+          via,
         });
         (building.floors || []).forEach((floor) => {
           floor.rooms.forEach((room) => {
@@ -39,6 +43,7 @@ function buildIndex() {
               sublabel: `${building.name} \u00B7 ${floor.label} \u00B7 ${campus.name}`,
               path: `/campus/${campusId}/building/${buildingId}`,
               state: { floorId: floor.id, roomName: room.name },
+              via,
             });
           });
         });

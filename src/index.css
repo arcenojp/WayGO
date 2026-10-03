@@ -30,3 +30,32 @@
 .waygo-hover-tint:hover {
   background: var(--brand-tint);
 }
+
+/* Wayfinding: pulsing target, bouncing arrow, and the animated route line */
+@keyframes waygo-heartbeat {
+  0%, 40%, 100% { fill-opacity: 0.25; stroke-width: 3px; filter: drop-shadow(0 0 2px var(--brand)); }
+  14%           { fill-opacity: 0.6;  stroke-width: 6px; filter: drop-shadow(0 0 14px var(--brand)); }
+  28%           { fill-opacity: 0.35; stroke-width: 4px; filter: drop-shadow(0 0 5px var(--brand)); }
+  42%           { fill-opacity: 0.55; stroke-width: 6px; filter: drop-shadow(0 0 12px var(--brand)); }
+}
+.waygo-heartbeat { animation: waygo-heartbeat 2.4s ease-in-out infinite; }
+
+@keyframes waygo-arrow-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(10px); }
+}
+.waygo-arrow { background: none; border: none; }
+.waygo-arrow > div { animation: waygo-arrow-bounce 0.9s ease-in-out infinite; }
+.waygo-arrow.waygo-arrow-up > div { rotate: 180deg; }
+
+@keyframes waygo-route-flow {
+  to { stroke-dashoffset: -40; }
+}
+.waygo-route-glow { filter: drop-shadow(0 0 6px var(--brand)); }
+.waygo-route-flow { animation: waygo-route-flow 1s linear infinite; }
+
+.waygo-pin { background: none; border: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .waygo-heartbeat, .waygo-arrow > div, .waygo-route-flow { animation: none; }
+}

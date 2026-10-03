@@ -116,6 +116,7 @@ export default function BuildingPage() {
             initialFloorId={location.state?.floorId}
             highlightRoomName={location.state?.roomName}
             highlightKey={location.key}
+            guideFromEntrance={location.state?.guide}
           />
         ) : (
           <FloorPlan

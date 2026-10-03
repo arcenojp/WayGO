@@ -71,6 +71,7 @@ src/
     campuses.js         campuses and buildings
     *Floors.js          traced rooms and stairs for each building
     rtsBuildingShapes.js  clickable building shapes on the RTS map
+    rtsWalkways.js      walkways and doors for directions on the RTS map
     campusGeo.js        campus outlines on the home map
     searchIndex.js      search
     photos.js           photo loading
@@ -92,3 +93,6 @@ src/
 3. Register the floors and artwork in `src/pages/BuildingPage.jsx` (or
    `CampusPage.jsx` for a single-building campus) and set
    `usesFloorPlanArtwork: true` on the building in `src/data/campuses.js`.
+4. For an RTS building, add its door to `BUILDING_DOORS` in
+   `src/data/rtsWalkways.js` so search can show directions to it. Mark stairs
+   students can't use with `staffOnly: true` so directions skip them.

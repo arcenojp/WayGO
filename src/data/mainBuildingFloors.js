@@ -7,6 +7,7 @@
 // - Floor 3's "main" and "staff" stairs are labeled as going to floor 4,
 //   but floor 4 has no matching landings.
 // - Three 4th-floor rooms have no label ("Room (unlabeled)").
+// - The staff stairs are marked "For Staff only", so directions avoid them.
 
 export const FLOOR_ARTWORK_SIZE = { width: 1876, height: 2691 };
 
@@ -166,6 +167,7 @@ export const MAIN_BUILDING_FLOORS = [
         id: "f1_stair_staff_to2",
         name: "Staff Stairs (to Floor 2)",
         group: "staff",
+        staffOnly: true,
         polygon: [[1604.9, 1934.8], [1713.9, 1934.8], [1713.9, 2001.8], [1604.9, 2001.8]],
         toFloorId: "floor2",
       },
@@ -373,6 +375,7 @@ export const MAIN_BUILDING_FLOORS = [
         id: "f2_stair_staff_to3",
         name: "Staff Stairs (to Floor 3)",
         group: "staff",
+        staffOnly: true,
         polygon: [[1667.8, 1987.8], [1815.2, 1987.8], [1815.2, 2055.1], [1667.8, 2055.1]],
         toFloorId: "floor3",
       },
@@ -380,6 +383,7 @@ export const MAIN_BUILDING_FLOORS = [
         id: "f2_stair_staff_to1",
         name: "Staff Stairs (to Floor 1)",
         group: "staff",
+        staffOnly: true,
         polygon: [[1668.0, 2066.1], [1815.4, 2066.1], [1815.4, 2133.2], [1668.0, 2133.2]],
         toFloorId: "floor1",
       },
@@ -588,6 +592,7 @@ export const MAIN_BUILDING_FLOORS = [
         id: "f3_stair_staff_to4",
         name: "Staff Stairs (to Floor 4)",
         group: "staff",
+        staffOnly: true,
         polygon: [[1670.8, 1987.8], [1818.2, 1987.8], [1818.2, 2055.1], [1670.8, 2055.1]],
         toFloorId: "floor4",
       },
@@ -595,6 +600,7 @@ export const MAIN_BUILDING_FLOORS = [
         id: "f3_stair_staff_to2",
         name: "Staff Stairs (to Floor 2)",
         group: "staff",
+        staffOnly: true,
         polygon: [[1671.0, 2066.1], [1818.4, 2066.1], [1818.4, 2133.2], [1671.0, 2133.2]],
         toFloorId: "floor2",
       },

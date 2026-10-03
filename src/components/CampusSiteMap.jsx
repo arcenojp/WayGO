@@ -3,13 +3,13 @@ import { CAMPUSES } from "../data/campuses";
 import RtsCampusMap from "./RtsCampusMap";
 import { C } from "../theme";
 
-export default function CampusSiteMap({ campusId, onSelectBuilding }) {
+export default function CampusSiteMap({ campusId, onSelectBuilding, route, routeKey, onEndRoute }) {
   const campus = CAMPUSES[campusId];
   const [hover, setHover] = useState(null);
 
   // RTS Campus has its own illustrated map.
   if (campusId === "rts") {
-    return <RtsCampusMap onSelectBuilding={onSelectBuilding} />;
+    return <RtsCampusMap onSelectBuilding={onSelectBuilding} route={route} routeKey={routeKey} onEndRoute={onEndRoute} />;
   }
 
   const buildings = Object.entries(campus.buildings);

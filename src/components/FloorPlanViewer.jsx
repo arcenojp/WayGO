@@ -5,6 +5,8 @@ import "leaflet/dist/leaflet.css";
 import { Layers } from "lucide-react";
 import { C } from "../theme";
 import { useFillViewport, SyncMapSize } from "./useFillViewport";
+import { targetStyle, addClass, arrowFor, polygonBounds } from "./wayfinding";
+import RouteBanner from "./RouteBanner";
 
 /**
  * Interactive floor plan for one building, rendered with Leaflet CRS.Simple:
@@ -24,78 +26,76 @@ import { useFillViewport, SyncMapSize } from "./useFillViewport";
  *   highlightRoomName room to find (from search)
  *   highlightKey      changes on every search, so repeating the same
  *                     search replays the animation
+ *   guideFromEntrance start on the first floor and point to the stairs
+ *                     (the user is just entering the building)
  *
- * A searched room gets a bouncing arrow and a pulsing glow until the user
- * changes floor or clicks another room.
+ * A searched room gets a bouncing arrow and a pulsing glow. On any other
+ * floor, the stairs leading toward it are highlighted instead, until the
+ * user closes the directions or clicks another room.
  */
-const TARGET_CSS = `
-  @keyframes fpv-heartbeat {
-    0%, 40%, 100% { fill-opacity: 0.25; stroke-width: 3px; filter: drop-shadow(0 0 2px ${C.brand}); }
-    14%           { fill-opacity: 0.6;  stroke-width: 6px; filter: drop-shadow(0 0 14px ${C.brand}); }
-    28%           { fill-opacity: 0.35; stroke-width: 4px; filter: drop-shadow(0 0 5px ${C.brand}); }
-    42%           { fill-opacity: 0.55; stroke-width: 6px; filter: drop-shadow(0 0 12px ${C.brand}); }
-  }
-  .fpv-heartbeat { animation: fpv-heartbeat 2.4s ease-in-out infinite; }
 
-  @keyframes fpv-arrow-bounce {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(10px); }
-  }
-  .fpv-arrow { background: none; border: none; }
-  .fpv-arrow > div { animation: fpv-arrow-bounce 0.9s ease-in-out infinite; }
-  .fpv-arrow.fpv-arrow-up > div { rotate: 180deg; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .fpv-heartbeat, .fpv-arrow > div { animation: none; }
-  }
-`;
-
-const targetStyle = {
-  color: C.brand,
-  weight: 3,
-  fillColor: C.brand,
-  fillOpacity: 0.35,
-  className: "fpv-heartbeat",
+const center = (polygon) => {
+  const { minX, maxX, minY, maxY } = polygonBounds(polygon);
+  return [(minX + maxX) / 2, (minY + maxY) / 2];
 };
 
-const ARROW_SIZE = 44;
-
-// A downward arrow; the "up" variant is the same arrow rotated via CSS.
-function arrowIcon(pointsUp) {
-  return L.divIcon({
-    className: `fpv-arrow${pointsUp ? " fpv-arrow-up" : ""}`,
-    iconSize: [ARROW_SIZE, ARROW_SIZE],
-    iconAnchor: [ARROW_SIZE / 2, pointsUp ? 0 : ARROW_SIZE],
-    html: `<div><svg width="${ARROW_SIZE}" height="${ARROW_SIZE}" viewBox="0 0 24 24" fill="${C.brand}" stroke="#FFFFFF" stroke-width="1.5" stroke-linejoin="round"><path d="M9 2h6v10h5l-8 10-8-10h5z"/></svg></div>`,
-  });
+// The next floor on the way from one floor to another, following the stairs
+// (breadth-first, so it takes the fewest flights). Null if unreachable.
+function nextFloorToward(floors, fromId, toId) {
+  const prev = { [fromId]: null };
+  const queue = [fromId];
+  while (queue.length > 0) {
+    const id = queue.shift();
+    if (id === toId) break;
+    for (const stair of floors.find((f) => f.id === id)?.stairs || []) {
+      if (!(stair.toFloorId in prev)) {
+        prev[stair.toFloorId] = id;
+        queue.push(stair.toFloorId);
+      }
+    }
+  }
+  if (!(toId in prev)) return null;
+  let step = toId;
+  while (prev[step] !== fromId) step = prev[step];
+  return step;
 }
 
-const ARROW_ICONS = { down: arrowIcon(false), up: arrowIcon(true) };
-
-function polygonBounds(polygon) {
-  const xs = polygon.map(([x]) => x);
-  const ys = polygon.map(([, y]) => y);
-  return { minX: Math.min(...xs), maxX: Math.max(...xs), minY: Math.min(...ys), maxY: Math.max(...ys) };
+// The stairs on this floor to take toward the target room: one leading to
+// the next floor on the way, closest to where the room is. Staff-only stairs
+// are used only when there's no other way.
+function stairTowards(floors, floor, target) {
+  const nextId = nextFloorToward(floors, floor.id, target.floorId);
+  if (!nextId) return null;
+  const [rx, ry] = center(target.room.polygon);
+  const distance = (stair) => {
+    const [sx, sy] = center(stair.polygon);
+    return Math.hypot(sx - rx, sy - ry);
+  };
+  const options = floor.stairs
+    .filter((st) => st.toFloorId === nextId)
+    .sort((a, b) => Boolean(a.staffOnly) - Boolean(b.staffOnly) || distance(a) - distance(b));
+  return options[0] || null;
 }
 
-// Zooms to the searched room. Must render after ResetViewOnFloorChange so it
-// runs after the floor's fit-to-bounds.
-function FlyToTarget({ target, toLatLng }) {
+// Zooms to a room or stairwell. Must render after ResetViewOnFloorChange so
+// it runs after the floor's fit-to-bounds.
+function FlyToShape({ polygon, focusKey, toLatLng }) {
   const map = useMap();
   useEffect(() => {
-    if (!target) return;
-    const { minX, maxX, minY, maxY } = polygonBounds(target.room.polygon);
+    if (!polygon) return;
+    const { minX, maxX, minY, maxY } = polygonBounds(polygon);
     const t = setTimeout(() => {
       const isPhone = window.innerWidth < 768;
       map.flyToBounds([toLatLng([minX, maxY]), toLatLng([maxX, minY])], {
-        padding: [40, 40],
+        paddingTopLeft: [40, 80], // room for the directions banner
+        paddingBottomRight: [40, 40],
         maxZoom: isPhone ? -1 : -0.25,
         duration: 0.8,
       });
     }, 150);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [target]);
+  }, [focusKey]);
   return null;
 }
 
@@ -154,6 +154,7 @@ export default function FloorPlanViewer({
   initialFloorId,
   highlightRoomName,
   highlightKey,
+  guideFromEntrance,
 }) {
   const [floorId, setFloorId] = useState(initialFloorId || floors[0].id);
   const [arrivedGroup, setArrivedGroup] = useState(null); // stair group to highlight after taking stairs
@@ -186,35 +187,27 @@ export default function FloorPlanViewer({
       (floors.find((f) => f.id === initialFloorId && hasRoom(f)) || floors.find(hasRoom));
     const room = targetFloor?.rooms.find((r) => r.name === highlightRoomName);
     if (room) {
-      setFloorId(targetFloor.id);
+      setFloorId(guideFromEntrance ? floors[0].id : targetFloor.id);
       setTarget({ floorId: targetFloor.id, room });
     } else if (initialFloorId) {
       setFloorId(initialFloorId);
     }
   }
 
-  const changeFloor = (id) => {
-    setFloorId(id);
-    setTarget(null);
-  };
-
+  // The target stays set across floor changes: on its floor the room pulses,
+  // on other floors the stairs toward it do.
   const activeTarget = target && target.floorId === floor.id ? target : null;
-  let arrow = null;
-  if (activeTarget) {
-    const { minX, maxX, minY, maxY } = polygonBounds(activeTarget.room.polygon);
-    // Arrow above the room pointing down, or below pointing up if the room
-    // is at the top edge.
-    const pointsUp = minY < ARROW_SIZE * 2;
-    arrow = {
-      position: toLatLng([(minX + maxX) / 2, pointsUp ? maxY + 8 : minY - 8]),
-      icon: pointsUp ? ARROW_ICONS.up : ARROW_ICONS.down,
-    };
-  }
+  const targetFloor = target && floors.find((f) => f.id === target.floorId);
+  const guideStair = target && !activeTarget ? stairTowards(floors, floor, target) : null;
+  const goingUp = targetFloor && floors.indexOf(targetFloor) > floors.indexOf(floor);
+
+  const focus = activeTarget ? activeTarget.room : guideStair;
+  const arrow = focus ? arrowFor(focus.polygon, toLatLng) : null;
 
   useEffect(() => () => clearTimeout(pulseTimeout.current), []);
 
   const takeStairs = (stair) => {
-    changeFloor(stair.toFloorId);
+    setFloorId(stair.toFloorId);
     setArrivedGroup(stair.group);
     clearTimeout(pulseTimeout.current);
     pulseTimeout.current = setTimeout(() => setArrivedGroup(null), 1600);
@@ -222,14 +215,13 @@ export default function FloorPlanViewer({
 
   return (
     <div>
-      <style>{TARGET_CSS}</style>
       <div className="flex items-center justify-center gap-2 md:gap-3 mb-4 md:mb-6">
         <Layers size={28} className="hidden sm:block shrink-0" style={{ color: C.inkSoft }} />
         <div className="flex w-full sm:w-auto gap-1.5 sm:gap-2 md:gap-3 sm:flex-wrap justify-center">
           {floors.map((f) => (
             <button
               key={f.id}
-              onClick={() => changeFloor(f.id)}
+              onClick={() => setFloorId(f.id)}
               className="flex-1 sm:flex-none px-1 py-2.5 text-[15px] sm:min-w-[7rem] sm:px-6 sm:py-3 sm:text-lg md:min-w-[8.5rem] md:px-8 md:py-4 md:text-xl rounded-md border-2 transition-colors whitespace-nowrap waygo-hover-tint"
               style={{
                 borderColor: C.brand,
@@ -244,7 +236,18 @@ export default function FloorPlanViewer({
         </div>
       </div>
 
-      <div ref={frameRef} className="w-full rounded-sm overflow-hidden" style={{ height: frameHeight ?? 360, border: `1px solid ${C.line}` }}>
+      <div ref={frameRef} className="relative w-full rounded-sm overflow-hidden" style={{ height: frameHeight ?? 360, border: `1px solid ${C.line}` }}>
+        {target && (
+          <RouteBanner onClose={() => setTarget(null)}>
+            {activeTarget ? (
+              <><strong>{target.room.name}</strong> is here on the {floor.label}.</>
+            ) : guideStair ? (
+              <><strong>{target.room.name}</strong> is on the {targetFloor.label}. Take the highlighted stairs {goingUp ? "up" : "down"}.</>
+            ) : (
+              <><strong>{target.room.name}</strong> is on the {targetFloor.label}. Use the floor buttons above.</>
+            )}
+          </RouteBanner>
+        )}
         {frameHeight !== null && (
         <MapContainer
           crs={L.CRS.Simple}
@@ -260,7 +263,7 @@ export default function FloorPlanViewer({
           <ResetViewOnFloorChange floorId={floorId} bounds={bounds} />
           <ImageOverlay url={artworkUrls[floor.artworkFile]} bounds={bounds} />
 
-          <FlyToTarget target={activeTarget} toLatLng={toLatLng} />
+          <FlyToShape polygon={focus?.polygon} focusKey={focus ? `${floor.id}:${focus.id}:${handledKey}` : null} toLatLng={toLatLng} />
 
           {floor.rooms.map((room) => {
             const isTarget = activeTarget?.room.id === room.id;
@@ -273,7 +276,7 @@ export default function FloorPlanViewer({
                 positions={room.polygon.map(toLatLng)}
                 pathOptions={isTarget ? targetStyle : roomStyle}
                 eventHandlers={{
-                  add: (e) => isTarget && e.target.getElement()?.classList.add("fpv-heartbeat"),
+                  add: isTarget ? addClass("waygo-heartbeat") : undefined,
                   click: () => {
                     if (!isTarget) setTarget(null);
                     onRoomSelect({ ...room, floorLabel: floor.label, buildingName });
@@ -287,7 +290,7 @@ export default function FloorPlanViewer({
 
           {arrow && (
             <Marker
-              key={`${activeTarget.room.id}-arrow`}
+              key={`${focus.id}-arrow`}
               position={arrow.position}
               icon={arrow.icon}
               interactive={false}
@@ -296,15 +299,18 @@ export default function FloorPlanViewer({
 
           {floor.stairs.map((stair) => {
             const isPulsing = arrivedGroup === stair.group;
+            const isGuide = guideStair?.id === stair.id;
+            const style = isGuide ? targetStyle : isPulsing ? stairPulseStyle : stairStyle;
             return (
               <Polygon
-                key={stair.id}
+                key={isGuide ? `${stair.id}-guide` : stair.id}
                 positions={stair.polygon.map(toLatLng)}
-                pathOptions={isPulsing ? stairPulseStyle : stairStyle}
+                pathOptions={style}
                 eventHandlers={{
+                  add: isGuide ? addClass("waygo-heartbeat") : undefined,
                   click: () => takeStairs(stair),
-                  mouseover: (e) => e.target.setStyle(stairHoverStyle),
-                  mouseout: (e) => e.target.setStyle(isPulsing ? stairPulseStyle : stairStyle),
+                  mouseover: (e) => !isGuide && e.target.setStyle(stairHoverStyle),
+                  mouseout: (e) => !isGuide && e.target.setStyle(style),
                 }}
               />
             );

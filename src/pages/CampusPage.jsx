@@ -44,6 +44,8 @@ export default function CampusPage() {
   const [room, setRoom] = useState(null);
   const [selectedBuilding, setSelectedBuilding] = useState(null);
   const campus = CAMPUSES[campusId];
+  // Directions from search: { buildingId, label, next: { path, state } }
+  const route = location.state?.route;
 
   if (!campus) {
     return (
@@ -80,6 +82,7 @@ export default function CampusPage() {
                 initialFloorId={location.state?.floorId}
                 highlightRoomName={location.state?.roomName}
                 highlightKey={location.key}
+                guideFromEntrance={location.state?.guide}
               />
             </div>
           ) : campus.type === "single" ? (
@@ -93,9 +96,16 @@ export default function CampusPage() {
           ) : (
             <CampusSiteMap
               campusId={campusId}
+              route={route}
+              routeKey={location.key}
+              onEndRoute={() => navigate(location.pathname, { replace: true })}
               onSelectBuilding={(buildingId) => {
                 const building = campus.buildings[buildingId];
-                if (building?.imageOnly) {
+                if (route?.buildingId === buildingId && !building?.imageOnly) {
+                  // Arriving by directions: the floor plan starts at the
+                  // entrance floor and guides the user up the stairs.
+                  navigate(route.next.path, { state: { ...route.next.state, guide: true } });
+                } else if (building?.imageOnly) {
                   setSelectedBuilding({ id: buildingId, ...building });
                 } else {
                   navigate(`/campus/${campusId}/building/${buildingId}`);
