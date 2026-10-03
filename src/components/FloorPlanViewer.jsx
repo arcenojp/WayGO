@@ -152,6 +152,25 @@ export default function FloorPlanViewer({
 
   const floor = floors.find((f) => f.id === floorId) || floors[0];
 
+  // The browser keeps showing the previous image until the next one has
+  // downloaded, which would put this floor's rooms over the last floor's
+  // drawing. So the artwork stays hidden until its own image has loaded.
+  const artworkUrl = artworkUrls[floor.artworkFile];
+  const [loadedUrl, setLoadedUrl] = useState(null);
+  const artworkLoading = loadedUrl !== artworkUrl;
+  const preloaded = useRef(false);
+  const onArtworkLoad = (e) => {
+    setLoadedUrl(e.target.getElement().getAttribute("src"));
+    // Once the first floor is showing, fetch the others in the background so
+    // switching floors doesn't wait for a download.
+    if (!preloaded.current) {
+      preloaded.current = true;
+      Object.values(artworkUrls).forEach((url) => {
+        new Image().src = url;
+      });
+    }
+  };
+
   const { width, height } = floor.artworkSize || artworkSize;
   const bounds = [
     [-height, 0],
@@ -231,6 +250,11 @@ export default function FloorPlanViewer({
       </div>
 
       <div ref={frameRef} className="relative w-full rounded-sm overflow-hidden" style={{ height: frameHeight ?? 360, border: `1px solid ${C.line}` }}>
+        {artworkLoading && (
+          <div className="absolute inset-0 z-[999] flex items-center justify-center pointer-events-none text-sm" style={{ color: C.inkSoft }}>
+            Loading {floor.label}…
+          </div>
+        )}
         {target && (
           <RouteBanner onClose={() => setTarget(null)}>
             {activeTarget ? (
@@ -258,7 +282,7 @@ export default function FloorPlanViewer({
         >
           <SyncMapSize height={frameHeight} />
           <ResetViewOnFloorChange floorId={floorId} bounds={bounds} panBounds={panBounds} />
-          <ImageOverlay url={artworkUrls[floor.artworkFile]} bounds={bounds} />
+          <ImageOverlay url={artworkUrl} bounds={bounds} opacity={artworkLoading ? 0 : 1} eventHandlers={{ load: onArtworkLoad }} />
 
           <FlyToShapes polygons={focus.map((f) => f.polygon)} focusKey={focusKey} toLatLng={toLatLng} />
 
