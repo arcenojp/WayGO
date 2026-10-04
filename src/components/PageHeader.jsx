@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import Breadcrumb from "./Breadcrumb";
 import SearchBar from "./SearchBar";
+import ProfileMenu from "./ProfileMenu";
 import { C } from "../theme";
 
 export default function PageHeader({ crumbs, backTo, backLabel }) {
@@ -31,7 +32,7 @@ export default function PageHeader({ crumbs, backTo, backLabel }) {
         <SearchBar />
       </div>
 
-      <div className="order-2 md:order-3 md:flex-1 flex justify-end">
+      <div className="order-2 md:order-3 md:flex-1 flex justify-end items-center gap-2">
         {backTo && (
           <Link
             to={backTo}
@@ -42,6 +43,7 @@ export default function PageHeader({ crumbs, backTo, backLabel }) {
             {backLabel}
           </Link>
         )}
+        <ProfileMenu />
       </div>
     </header>
   );

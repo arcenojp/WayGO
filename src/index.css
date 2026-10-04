@@ -26,6 +26,12 @@
   outline: none;
 }
 
+/* Text fields (login form) */
+.waygo-input:focus {
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 0 3px var(--brand-tint);
+}
+
 /* Hover tint for floor buttons and the back button */
 .waygo-hover-tint:hover {
   background: var(--brand-tint);

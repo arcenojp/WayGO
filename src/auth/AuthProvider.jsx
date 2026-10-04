@@ -1,0 +1,39 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { hasBackend } from "../api/client";
+import * as authApi from "../api/auth";
+import { AuthContext } from "./useAuth";
+
+export default function AuthProvider({ children }) {
+  const [state, setState] = useState({ status: hasBackend ? "loading" : "off", user: null });
+
+  // Restore the session from the backend's cookie on page load.
+  useEffect(() => {
+    if (!hasBackend) return;
+    const controller = new AbortController();
+    authApi
+      .fetchCurrentUser({ signal: controller.signal })
+      .then(({ user }) => setState({ status: "signedIn", user }))
+      .catch((err) => {
+        if (err.name !== "AbortError") setState({ status: "signedOut", user: null });
+      });
+    return () => controller.abort();
+  }, []);
+
+  const login = useCallback(async (identifier, password) => {
+    const { user } = await authApi.login(identifier, password);
+    setState({ status: "signedIn", user });
+    return user;
+  }, []);
+
+  const logout = useCallback(async () => {
+    try {
+      await authApi.logout();
+    } catch {
+      // Sign out locally even if the server can't be reached.
+    }
+    setState({ status: "signedOut", user: null });
+  }, []);
+
+  const value = useMemo(() => ({ ...state, login, logout }), [state, login, logout]);
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}

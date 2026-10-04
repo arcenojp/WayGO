@@ -75,7 +75,9 @@ src/
     campusGeo.js        campus outlines on the home map
     searchIndex.js      search
     photos.js           photo loading
-  pages/                Dashboard, CampusPage, BuildingPage
+  api/                  requests to the backend (client.js, auth.js)
+  auth/                 login state, AuthProvider, RequireAuth
+  pages/                Dashboard, CampusPage, BuildingPage, LoginPage
   theme.js              colors and room icons
 ```
 
@@ -96,3 +98,34 @@ src/
 4. For an RTS building, add its door to `BUILDING_DOORS` in
    `src/data/rtsWalkways.js` so search can show directions to it. Mark stairs
    students can't use with `staffOnly: true` so directions skip them.
+
+---
+## Connecting a backend
+
+The frontend is ready for a login backend. Until one is connected it runs
+without login and every page is open, which is how it's deployed now.
+
+**Turning it on:** copy `.env.example` to `.env.local` and set
+`VITE_API_URL` to the backend's address (for example `http://localhost:4000`).
+On Vercel, add the same variable under Project Settings → Environment
+Variables and redeploy. Once it's set, the map pages need a signed-in user,
+`/login` shows the login form, and the header has a profile menu with Log out.
+
+**Endpoints the frontend calls** (all JSON; see `src/api/auth.js`):
+
+| Method and path | Body | Success | Failure |
+|---|---|---|---|
+| `GET /auth/me` | none | `200 { user }` | `401` when not signed in |
+| `POST /auth/login` | `{ identifier, password }` | `200 { user }` and sets the session cookie | `401` for a wrong ID or password; other errors as `{ message }` |
+| `POST /auth/logout` | none | `204` and clears the session cookie | |
+
+`identifier` is a student ID or an email address. `user` is
+`{ id, name, role, studentId?, email? }`, where `role` is `student`,
+`faculty`, `staff` or `admin`. Error messages in `{ message }` (for
+example "Your account is locked") are shown on the login form.
+
+**Sessions:** the backend keeps the session in an `httpOnly` cookie; the
+frontend never stores a token. Every request is sent with
+`credentials: "include"`, so the backend must allow the site's origin with
+CORS and `Access-Control-Allow-Credentials: true`. If the backend is on a
+different domain than the site, the cookie needs `SameSite=None; Secure`.
