@@ -26,6 +26,19 @@
   outline: none;
 }
 
+/* Links and text buttons on the account pages */
+.waygo-link {
+  color: var(--brand-dark);
+}
+.waygo-link:hover {
+  color: var(--brand);
+  text-decoration: underline;
+}
+.waygo-link:disabled {
+  opacity: 0.6;
+  text-decoration: none;
+}
+
 /* Text fields (login form) */
 .waygo-input:focus {
   border-color: var(--brand) !important;

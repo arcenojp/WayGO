@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { LayoutDashboard, LogOut } from "lucide-react";
 import { useAuth } from "../auth/useAuth";
 import { C } from "../theme";
 
@@ -73,6 +73,18 @@ export default function ProfileMenu() {
               </span>
             )}
           </div>
+          {user.role === "admin" && (
+            <Link
+              role="menuitem"
+              to="/admin"
+              onClick={() => setOpen(false)}
+              className="w-full flex items-center gap-2 px-4 py-3 text-sm font-medium waygo-hover-tint border-b"
+              style={{ color: C.brandDark, borderColor: C.line }}
+            >
+              <LayoutDashboard size={16} />
+              Admin dashboard
+            </Link>
+          )}
           <button
             role="menuitem"
             onClick={onLogout}

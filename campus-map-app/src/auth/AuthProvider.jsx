@@ -25,6 +25,13 @@ export default function AuthProvider({ children }) {
     return user;
   }, []);
 
+  // The last registration step creates the account and signs in.
+  const finishRegistration = useCallback(async (details) => {
+    const { user } = await authApi.finishRegistration(details);
+    setState({ status: "signedIn", user });
+    return user;
+  }, []);
+
   const logout = useCallback(async () => {
     try {
       await authApi.logout();
@@ -34,6 +41,9 @@ export default function AuthProvider({ children }) {
     setState({ status: "signedOut", user: null });
   }, []);
 
-  const value = useMemo(() => ({ ...state, login, logout }), [state, login, logout]);
+  const value = useMemo(
+    () => ({ ...state, login, finishRegistration, logout }),
+    [state, login, finishRegistration, logout]
+  );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
