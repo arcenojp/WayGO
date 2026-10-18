@@ -7,12 +7,14 @@ import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import AdminPage from "./pages/AdminPage";
 import RequireAuth from "./auth/RequireAuth";
+import TripProvider from "./components/TripProvider";
 
 // Map pages need a signed-in user once a backend is connected (see
 // src/api/client.js); until then they're open to everyone, and the account
 // pages redirect to the map.
 export default function App() {
   return (
+    <TripProvider>
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
@@ -22,5 +24,6 @@ export default function App() {
       <Route path="/campus/:campusId" element={<RequireAuth><CampusPage /></RequireAuth>} />
       <Route path="/campus/:campusId/building/:buildingId" element={<RequireAuth><BuildingPage /></RequireAuth>} />
     </Routes>
+    </TripProvider>
   );
 }

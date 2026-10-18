@@ -102,8 +102,8 @@ Only the first photo's name is shown. For more photos, change `-1` to
 | 1st Floor | Electrical Utility Room | `f1_electrical_utility_room_27-1.jpg` |
 | 1st Floor | Waiting Area | `f1_waiting_area_28-1.jpg` |
 | 2nd Floor | President's Office | `f2_president_s_office_0-1.jpg` |
-| 2nd Floor | RM-216 | `f2_rm_216_7-1.jpg` |
-| 2nd Floor | RM-218 | `f2_rm_218_8-1.jpg` |
+| 2nd Floor | Graduate School 1B | `f2_rm_216_7-1.jpg` |
+| 2nd Floor | Graduate School 1A | `f2_rm_218_8-1.jpg` |
 | 2nd Floor | College of Arts & Science Heads Office | `f2_college_of_arts___science_heads_office_9-1.jpg` |
 | 2nd Floor | College of Arts & Science Deans Office | `f2_college_of_arts___science_deans_office_10-1.jpg` |
 | 2nd Floor | Elevator | `f2_elevator_11-1.jpg` |
@@ -119,10 +119,10 @@ Only the first photo's name is shown. For more photos, change `-1` to
 | 2nd Floor | HM-Mini Restaurant | `f2_hm_mini_restaurant_21-1.jpg` |
 | 2nd Floor | HM-Mini Hotel | `f2_hm_mini_hotel_22-1.jpg` |
 | 2nd Floor | RM-210 (Computer Lab) | `f2_rm_210__computer_lab_23-1.jpg` |
-| 2nd Floor | RM-219 | `f2_rm_219_24-1.jpg` |
-| 2nd Floor | RM-217 | `f2_rm_217_25-1.jpg` |
-| 2nd Floor | RM-215 | `f2_rm_215_26-1.jpg` |
-| 2nd Floor | RM-213 | `f2_rm_213_27-1.jpg` |
+| 2nd Floor | Graduate School | `f2_rm_219_24-1.jpg` |
+| 2nd Floor | RM-214 | `f2_rm_217_25-1.jpg` |
+| 2nd Floor | RM-213 | `f2_rm_215_26-1.jpg` |
+| 2nd Floor | RM-212 | `f2_rm_213_27-1.jpg` |
 | 2nd Floor | CR Male (Main 2nd floor) | `f2_cr_male__main_2nd_floor_30-1.jpg` |
 | 2nd Floor | CR Female (Main 2nd floor) | `f2_cr_female__main_2nd_floor_31-1.jpg` |
 | 2nd Floor | Photo Room/DIO Office | `f2_photo_room_dio_office_32-1.jpg` |
@@ -158,18 +158,17 @@ Only the first photo's name is shown. For more photos, change `-1` to
 | 4th Floor | Room (unlabeled) | `f4_room__unlabeled_4-1.jpg` |
 | 4th Floor | Room (unlabeled) | `f4_room__unlabeled_5-1.jpg` |
 | 4th Floor | Terrace | `f4_terrace_6-1.jpg` |
-| 4th Floor | CR Male (Main 2nd floor) | `f4_cr_male__main_2nd_floor_8-1.jpg` |
-| 4th Floor | CR Female (Main 2nd floor) | `f4_cr_female__main_2nd_floor_9-1.jpg` |
+| 4th Floor | CR (Main 4th floor) | `f4_cr_male__main_2nd_floor_8-1.jpg` |
 
-### Practicum Center → `practicum-center/`
+### WIT Science Building (formerly Practicum Center) → `practicum-center/`
 
 | Floor | Room | File name (first photo) |
 |---|---|---|
 | Ground Floor | HM Hotel | `pc1_hm_hotel_1-1.jpg` |
-| Ground Floor | Room 4 | `pc1_room_4_2-1.jpg` |
-| Ground Floor | Physic Lab 1 | `pc1_physic_lab_1_3-1.jpg` |
+| Ground Floor | Room 7 | `pc1_room_4_2-1.jpg` |
+| Ground Floor | Physics Lab 1 | `pc1_physic_lab_1_3-1.jpg` |
 | Ground Floor | Faculty Room | `pc1_faculty_room_4-1.jpg` |
-| Ground Floor | Physic Lab 2 | `pc1_physic_lab_2_5-1.jpg` |
+| Ground Floor | Physics Lab 2 | `pc1_physic_lab_2_5-1.jpg` |
 | Ground Floor | Room 1 | `pc1_room_1_6-1.jpg` |
 | Ground Floor | Room 2 | `pc1_room_2_7-1.jpg` |
 | Ground Floor | Room 3 | `pc1_room_3_8-1.jpg` |
@@ -220,6 +219,7 @@ Only the first photo's name is shown. For more photos, change `-1` to
 | 1st Floor | Gas Welding Shop | `mb1_gas_welding_shop_6-1.jpg` |
 | 1st Floor | Mock Engine Room | `mb1_mock_engine_room_7-1.jpg` |
 | 1st Floor | CR (marine building) | `mb1_cr_8-1.jpg` |
+| 1st Floor | Elevator | `mb1_elevator-1.jpg` |
 | 2nd Floor | Shipboard Training Office | `mb2_shipboard_training_office_1-1.jpg` |
 | 2nd Floor | Simulator Room | `mb2_simulator_room_2-1.jpg` |
 | 2nd Floor | 23M | `mb2_23m_3-1.jpg` |
@@ -228,7 +228,9 @@ Only the first photo's name is shown. For more photos, change `-1` to
 | 2nd Floor | 22M | `mb2_22m_6-1.jpg` |
 | 2nd Floor | 24M | `mb2_24m_7-1.jpg` |
 | 2nd Floor | 26M - Drafting Room/AVR | `mb2_26m_drafting_room_avr_8-1.jpg` |
+| 2nd Floor | Elevator | `mb2_elevator-1.jpg` |
 | 3rd Floor | Library (RTS Campus) | `mb3_library_1-1.jpg` |
+| 3rd Floor | Elevator | `mb3_elevator-1.jpg` |
 
 ### Senior High Building (RTS Campus) → `senior-high/`
 
@@ -291,24 +293,29 @@ Only the first photo's name is shown. For more photos, change `-1` to
 | 1st Floor | CR FEMALE | `nb1_cr_female_2-1.jpg` |
 | 1st Floor | Faculty | `nb1_faculty_3-1.jpg` |
 | 1st Floor | Coe Deans Office | `nb1_coe_deans_office_4-1.jpg` |
-| 1st Floor | R1 | `nb1_r1_5-1.jpg` |
-| 1st Floor | R2 | `nb1_r2_6-1.jpg` |
+| 1st Floor | Room 1 | `nb1_r1_5-1.jpg` |
+| 1st Floor | Room 2 | `nb1_r2_6-1.jpg` |
 | 1st Floor | Elevator | `nb1_elevator_7-1.jpg` |
-| 2nd Floor | R6 | `nb2_r6_1-1.jpg` |
-| 2nd Floor | R7 | `nb2_r7_2-1.jpg` |
+| 2nd Floor | Room 6 | `nb2_r6_1-1.jpg` |
+| 2nd Floor | Room 7 | `nb2_r7_2-1.jpg` |
 | 2nd Floor | CR MALE | `nb2_cr_male_3-1.jpg` |
 | 2nd Floor | CR FEMALE | `nb2_cr_female_4-1.jpg` |
-| 2nd Floor | R5 | `nb2_r5_5-1.jpg` |
+| 2nd Floor | Room 5 | `nb2_r5_5-1.jpg` |
 | 2nd Floor | Conference Room | `nb2_conference_room_6-1.jpg` |
-| 2nd Floor | R4 | `nb2_r4_7-1.jpg` |
-| 2nd Floor | R3 | `nb2_r3_8-1.jpg` |
+| 2nd Floor | Room 4 | `nb2_r4_7-1.jpg` |
+| 2nd Floor | Room 3 | `nb2_r3_8-1.jpg` |
 | 2nd Floor | Elevator | `nb2_elevator_9-1.jpg` |
-| 2nd Floor | Fire Exit | `nb2_fire_exit_10-1.jpg` |
-| 3rd Floor | R6 | `nb3_r6_1-1.jpg` |
-| 3rd Floor | R7 | `nb3_r7_2-1.jpg` |
+| 2nd Floor | Fire Exit (left) | `nb2_fire_exit_left-1.jpg` |
+| 2nd Floor | Fire Exit (middle) | `nb2_fire_exit_10-1.jpg` |
+| 2nd Floor | Fire Exit (right) | `nb2_fire_exit_right-1.jpg` |
+| 3rd Floor | Room 11 | `nb3_room_11-1.jpg` |
+| 3rd Floor | Room 10 | `nb3_room_10-1.jpg` |
 | 3rd Floor | Audio Visual Room | `nb3_audio_visual_room_3-1.jpg` |
+| 3rd Floor | Room 9 | `nb3_room_9-1.jpg` |
+| 3rd Floor | Room 8 | `nb3_room_8-1.jpg` |
 | 3rd Floor | Elevator | `nb3_elevator_4-1.jpg` |
-| 3rd Floor | Fire Exit | `nb3_fire_exit_5-1.jpg` |
+| 3rd Floor | Fire Exit (left) | `nb3_fire_exit_5-1.jpg` |
+| 3rd Floor | Fire Exit (right) | `nb3_fire_exit_right-1.jpg` |
 
 ### CE Building (RTS Campus) → `ce-building/`
 

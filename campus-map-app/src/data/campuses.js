@@ -75,12 +75,12 @@ export const CAMPUSES = {
   },
 
   practicum: {
-    name: "Practicum Center",
+    name: "WIT Science Building",
     tagline: "Applied Skills Training Facility",
     type: "single",
     usesFloorPlanArtwork: true,
     about:
-      "The Practicum Center's floor plan is fully interactive — a real traced layout, not a simple room list.",
+      "The WIT Science Building's floor plan is fully interactive — a real traced layout, not a simple room list.",
     floors: practicumCenterFloorsSummary,
   },
 
@@ -103,7 +103,7 @@ export const CAMPUSES = {
         photos: [],
       },
       gym: {
-        name: "STS - Gymnasium",
+        name: "STS Gym",
         imageOnly: true,
         photos: [],
       },
@@ -113,17 +113,17 @@ export const CAMPUSES = {
         photos: [],
       },
       smallGrandStand: {
-        name: "SGS - Small Grand Stand",
+        name: "SGS Small Grand Stand",
         imageOnly: true,
         photos: [],
       },
       seniorHigh: {
-        name: "Senior High Building",
+        name: "Senior High School Building",
         usesFloorPlanArtwork: true,
         floors: seniorHighFloorsSummary,
       },
       meLabs: {
-        name: "ME Laboratories",
+        name: "ME Laboratory",
         imageOnly: true,
         photos: [],
       },
@@ -133,7 +133,7 @@ export const CAMPUSES = {
         photos: [],
       },
       ceBuilding: {
-        name: "CE Building",
+        name: "Civil Engineering Building",
         usesFloorPlanArtwork: true,
         floors: ceBuildingFloorsSummary,
       },
@@ -148,25 +148,35 @@ export const CAMPUSES = {
         photos: [],
       },
       eeLab: {
-        name: "EE/Electronics Lab Custodian's Office",
+        name: "Electronic Engineering Lab",
         imageOnly: true,
         photos: [],
       },
       computerBuilding: {
-        name: "Computer Building",
+        name: "CompE Building",
         usesFloorPlanArtwork: true,
         floors: computerBuildingFloorsSummary,
       },
       // Unlabeled on the map; rename here and in rtsBuildingShapes.js.
       annexEast: {
-        name: "Unlabeled Annex (near Marine Engineering)",
+        name: "Unlabeled Annex (near Marine Building)",
         imageOnly: true,
         photos: [],
       },
       marineEngineering: {
-        name: "Marine Engineering Building",
+        name: "Marine Building",
         usesFloorPlanArtwork: true,
         floors: marineBuildingFloorsSummary,
+      },
+      auditorium: {
+        name: "Auditorium",
+        imageOnly: true,
+        photos: [],
+      },
+      waitingShed: {
+        name: "Waiting Shed",
+        imageOnly: true,
+        photos: [],
       },
       canteen: {
         name: "Canteen",
