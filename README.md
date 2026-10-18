@@ -12,7 +12,7 @@ WayGo is a web app that helps students, visitors, and staff find their way aroun
 4. Location Details – Displays information such as building name, floor number, room number, and facility type.
 5. Directions/Wayfinding – Provides a route from the user's starting location to the selected destination.
 6. Campus Area Selection – Allows users to select different campus areas and explore their locations.
-7. Accounts – Students, faculty and staff on the school's allowlist register with an email code and log in; admins manage the allowlist.
+7. Accounts – Students, faculty and staff register with an email code and log in; new IDs join the allowlist automatically, and admins can approve or block anyone.
 
 ---
 ## User Personas
@@ -93,8 +93,9 @@ public demo does.
 ---
 ## Security
 
-- Only people on the school's allowlist can register, and each account is
-  verified with a code sent to its email.
+- Anyone can register with their school ID (it's added to the allowlist,
+  where an admin can block it), and each account is verified with a code
+  sent to its email.
 - Passwords and email codes are stored hashed; sessions use an `httpOnly`
   cookie whose token is stored only as a hash.
 - Repeated wrong passwords lock the account for 15 minutes, and login and

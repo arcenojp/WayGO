@@ -97,7 +97,25 @@ test("registration checks the allowlist, name and status", async () => {
   const c = client(t.baseUrl);
   const start = (body) => c("POST", "/auth/register/start", body);
 
-  assert.equal((await start({ schoolId: "1111-11111", fullName: "Nobody", email: "n@x.test" })).status, 400);
+  // An ID the admin hasn't added is added now, approved, and gets a code.
+  const newcomer = await start({ schoolId: "1111-11111", fullName: "New  Comer", email: "n@x.test" });
+  assert.equal(newcomer.status, 200, JSON.stringify(newcomer.body));
+  assert.equal(t.mails.at(-1).to, "n@x.test");
+  const added = (await admin("GET", "/admin/allowlist?q=1111-11111")).body.entries[0];
+  assert.equal(added.fullName, "New Comer");
+  assert.equal(added.status, "approved");
+  assert.equal(added.role, "student");
+
+  // They can correct a mistyped name before finishing (the new code just
+  // needs the usual short wait)...
+  await start({ schoolId: "1111-11111", fullName: "Newt Comer", email: "n@x.test" });
+  const fixed = (await admin("GET", "/admin/allowlist?q=1111-11111")).body.entries[0];
+  assert.equal(fixed.fullName, "Newt Comer");
+  // ...but once the admin sets the name, it has to match.
+  await admin("PATCH", `/admin/allowlist/${fixed.id}`, { fullName: "Newton Comer" });
+  const locked = await start({ schoolId: "1111-11111", fullName: "Someone Else", email: "n@x.test" });
+  assert.equal(locked.body.message, "The name doesn't match our records for this ID.");
+
   const wrongName = await start({ schoolId: "2023-00456", fullName: "Maria Cruz", email: "m@x.test" });
   assert.equal(wrongName.body.message, "The name doesn't match our records for this ID.");
   assert.equal((await start({ schoolId: "2024-00111", fullName: "Ana Lim", email: "a@x.test" })).status, 403);
@@ -271,8 +289,9 @@ test("requests from other websites are refused", async () => {
 
 test("stats and delete", async () => {
   const stats = await admin("GET", "/admin/stats");
-  assert.deepEqual(stats.body, { total: 5, registered: 1, pending: 1, blocked: 0 });
+  // Five added by the admin, plus one who signed up without being added.
+  assert.deepEqual(stats.body, { total: 6, registered: 1, pending: 1, blocked: 0 });
   const entry = (await admin("GET", "/admin/allowlist?q=EMP-0007")).body.entries[0];
   assert.equal((await admin("DELETE", `/admin/allowlist/${entry.id}`)).status, 204);
-  assert.equal((await admin("GET", "/admin/stats")).body.total, 4);
+  assert.equal((await admin("GET", "/admin/stats")).body.total, 5);
 });

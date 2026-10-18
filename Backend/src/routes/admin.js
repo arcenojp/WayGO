@@ -155,6 +155,8 @@ export function adminRouter({ db }) {
 
     const columns = { fullName: "full_name", role: "role", status: "status" };
     const sets = fields.map((f, i) => `${columns[f]} = $${i + 2}`);
+    // A name the admin set is checked at registration from now on.
+    if (value.fullName !== undefined) sets.push("self_added = false");
     const { rowCount } = await db.query(
       `UPDATE allowlist SET ${sets.join(", ")}, updated_at = now() WHERE id = $1`,
       [id, ...fields.map((f) => value[f])]

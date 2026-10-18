@@ -5,9 +5,10 @@ import { startRegistration } from "../api/auth";
 import { AuthLayout, Field, FormError, FormNotice, SubmitButton, linkClass } from "../components/AuthForm";
 import { C } from "../theme";
 
-// Two steps: (1) student/employee ID, full name and email are checked against
-// the allowlist and a code is emailed; (2) the code and a new password create
-// the account and sign the user in.
+// Two steps: (1) student/employee ID, full name and email are sent (a new ID
+// is added to the allowlist; pending or blocked IDs are refused) and a code
+// is emailed; (2) the code and a new password create the account and sign
+// the user in.
 export default function RegisterPage() {
   const { status, finishRegistration } = useAuth();
   const navigate = useNavigate();
