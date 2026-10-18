@@ -14,7 +14,8 @@ export const login = (identifier, password) =>
 
 export const logout = () => api("/auth/logout", { method: "POST" });
 
-// Registration, step 1: checks the allowlist and emails a 6-digit code.
+// Registration, step 1: adds a new ID to the allowlist (approved), refuses
+// pending or blocked IDs, and emails a 6-digit code.
 export const startRegistration = ({ schoolId, fullName, email }) =>
   api("/auth/register/start", { method: "POST", body: { schoolId, fullName, email } });
 

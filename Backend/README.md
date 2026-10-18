@@ -1,10 +1,10 @@
 # WayGo Backend
 
 Login, registration and admin API for the WayGo campus map (see the
-[main README](../README.md) for the whole project). Only people on
-the school's allowlist (students, faculty and staff, added by an admin) can
-create an account, and every account is verified with a code sent to its
-email.
+[main README](../README.md) for the whole project). Anyone can create an
+account with their student or employee ID; it's added to the school's
+allowlist, where an admin can block it (or set it to pending). Every account
+is verified with a code sent to its email.
 
 **Stack:** Node.js 22, Express 5, PostgreSQL.
 
@@ -39,9 +39,12 @@ terminal instead of being sent.
 ## How It Works
 
 **Registration (two steps)**
-1. The person enters their student or employee ID, full name and email. The ID
-   must be on the allowlist and approved, and the name must match the record
-   (case, spacing and accents are ignored). A 6-digit code is emailed.
+1. The person enters their student or employee ID, full name and email. An ID
+   that isn't on the allowlist yet is added as an approved student. An ID the
+   admin set to pending or blocked is refused. People who added themselves
+   can correct their name until they finish registering; a name the admin
+   entered or edited must match (case, spacing and accents are ignored).
+   A 6-digit code is emailed.
 2. They enter the code and choose a password. The account is created and
    they're signed in.
 
