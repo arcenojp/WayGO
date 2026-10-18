@@ -6,7 +6,8 @@ import * as adminApi from "../api/admin";
 import { csvToEntries } from "../utils/csv";
 import { C } from "../theme";
 
-// Admin dashboard: who may register (the allowlist), and their status.
+// Admin dashboard: everyone on the allowlist (added here, or added when
+// they signed up) and their status: approve, block, or set back to pending.
 const PAGE_SIZE = 50;
 const ROLES = ["student", "faculty", "staff"];
 const STATUS_STYLE = {
@@ -337,7 +338,7 @@ export default function AdminPage() {
                 : total === 0
                   ? query || status
                     ? "No one matches that search."
-                    : "No one on the allowlist yet. Add people above."
+                    : "No one on the allowlist yet. Add people above, or they appear here when they sign up."
                   : `Showing ${entries.length} of ${total}`}
             </span>
             {entries.length < total && (

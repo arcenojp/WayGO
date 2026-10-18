@@ -149,18 +149,40 @@ export function authRouter({ db, mailer, config }) {
     res.status(204).end();
   });
 
-  // Registration step 1: check the allowlist and email a code.
+  // Registration step 1: check the allowlist and email a code. Anyone can
+  // sign up: an ID the admin hasn't added yet is added now, approved, so it
+  // shows on the admin dashboard, where it can be blocked. IDs the admin set
+  // to pending or blocked still can't register. People who added themselves
+  // can correct their name until they finish registering; a name the admin
+  // entered must match.
   router.post("/register/start", limiter(10), async (req, res) => {
     const schoolId = normalizeSchoolId(text(req.body, "schoolId", "student or employee ID", { max: 50 }));
     const fullName = text(req.body, "fullName", "full name");
     const to = email(req.body);
 
-    const { rows } = await db.query(
-      `SELECT a.*, u.id AS user_id FROM allowlist a LEFT JOIN users u ON u.allowlist_id = a.id WHERE a.school_id = $1`,
-      [schoolId]
-    );
-    const entry = rows[0];
-    if (!entry) throw badRequest("This ID isn't on the allowlist. Contact the admin.");
+    const find = () =>
+      db.query(
+        `SELECT a.*, u.id AS user_id FROM allowlist a LEFT JOIN users u ON u.allowlist_id = a.id WHERE a.school_id = $1`,
+        [schoolId]
+      );
+    const name = fullName.replace(/\s+/g, " ");
+    let entry = (await find()).rows[0];
+    if (!entry) {
+      await db.query(
+        `INSERT INTO allowlist (school_id, full_name, role, status, self_added) VALUES ($1, $2, 'student', 'approved', true)
+         ON CONFLICT (school_id) DO NOTHING`,
+        [schoolId, name]
+      );
+      entry = (await find()).rows[0];
+    } else if (
+      entry.self_added &&
+      !entry.user_id &&
+      entry.status === "approved" &&
+      normalizeName(entry.full_name) !== normalizeName(fullName)
+    ) {
+      await db.query("UPDATE allowlist SET full_name = $2, updated_at = now() WHERE id = $1", [entry.id, name]);
+      entry = { ...entry, full_name: name };
+    }
     if (normalizeName(entry.full_name) !== normalizeName(fullName)) {
       throw badRequest("The name doesn't match our records for this ID.");
     }
