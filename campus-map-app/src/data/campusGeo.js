@@ -43,7 +43,7 @@ export const CAMPUS_GEOJSON = {
     },
     {
       type: "Feature",
-      properties: { name: "Practicum Center", slug: "practicum", color: "#D89B3C", centroid: [10.710556, 122.564809] },
+      properties: { name: "WIT Science Building", slug: "practicum", color: "#D89B3C", centroid: [10.710556, 122.564809] },
       geometry: {
         type: "Polygon",
         coordinates: [

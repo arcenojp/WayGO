@@ -53,3 +53,74 @@ export function arrowFor(polygon, toLatLng) {
     icon: pointsUp ? ARROW_ICONS.up : ARROW_ICONS.down,
   };
 }
+
+const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
+const easeOut = (t) => 1 - (1 - t) ** 3;
+const fits = new WeakMap(); // map -> the zoom under way
+
+/**
+ * Glides the map to `bounds` (Leaflet fitBounds options, plus `duration`
+ * in seconds). Leaflet's flyTo redraws the whole floor drawing, blurs and
+ * shadows included, on every frame, which stutters; here the browser slides
+ * and scales the map as a ready-made picture while it moves, and Leaflet
+ * redraws it once at the end. A new glide while one is under way carries on
+ * from wherever the first one is.
+ */
+export function fitSmoothly(map, bounds, { duration = 0.9, ...options } = {}) {
+  const { center, zoom } = map._getBoundsCenterZoom(L.latLngBounds(bounds), options);
+  const pane = map.getPane("mapPane");
+  const running = fits.get(map);
+  const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion || !pane.animate) {
+    running?.anim.finish();
+    map.setView(center, zoom, { animate: false });
+    return;
+  }
+
+  // Views are { z: zoom, p: centre as a point on the map as it was when the
+  // glide began }. Leaflet keeps that view until the end, so the moving
+  // picture is that view, scaled and shifted.
+  let glide = running;
+  let from;
+  if (running) {
+    const t = Math.min(1, running.anim.currentTime / running.ms);
+    const u = running.ease(t);
+    from = { z: running.from.z + (running.to.z - running.from.z) * u, p: running.from.p.add(running.to.p.subtract(running.from.p).multiplyBy(u)) };
+    running.anim.onfinish = null;
+    running.anim.cancel(); // the next glide starts in the same frame
+  } else {
+    // Anything else moving the map (e.g. switching floors) ends the glide.
+    const stop = () => {
+      fits.get(map)?.anim.cancel();
+      fits.delete(map);
+      map.getContainer().classList.remove("waygo-gliding");
+    };
+    glide = { z0: map.getZoom(), pos: L.DomUtil.getPosition(pane), stop };
+    map.once("movestart", stop);
+    from = { z: glide.z0, p: map.getSize().divideBy(2) };
+    pane.style.transformOrigin = "0 0";
+    map.getContainer().classList.add("waygo-gliding");
+  }
+  const to = { z: zoom, p: map.latLngToContainerPoint(center) };
+  const ease = running ? easeOut : easeInOut;
+  const half = map.getSize().divideBy(2);
+  const frames = [];
+  for (let i = 0; i <= 30; i++) {
+    const u = ease(i / 30);
+    const k = map.getZoomScale(from.z + (to.z - from.z) * u, glide.z0);
+    const p = from.p.add(to.p.subtract(from.p).multiplyBy(u));
+    const shift = half.add(glide.pos.subtract(p).multiplyBy(k));
+    frames.push({ transform: `translate3d(${shift.x}px, ${shift.y}px, 0) scale(${k})` });
+  }
+  const ms = duration * 1000;
+  const anim = pane.animate(frames, { duration: ms, fill: "forwards" });
+  Object.assign(glide, { from, to, ease, ms, anim });
+  fits.set(map, glide);
+  anim.onfinish = () => {
+    map.off("movestart", glide.stop);
+    fits.delete(map);
+    map.getContainer().classList.remove("waygo-gliding");
+    map.setView(center, zoom, { animate: false });
+    anim.cancel();
+  };
+}

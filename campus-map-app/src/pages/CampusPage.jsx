@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import PageHeader from "../components/PageHeader";
+import AppShell from "../components/AppShell";
+import { useTrip } from "../components/tripContext";
 import CampusSiteMap from "../components/CampusSiteMap";
 import FloorPlan from "../components/FloorPlan";
 import FloorPlanViewer from "../components/FloorPlanViewer";
@@ -8,7 +9,6 @@ import RoomPanel from "../components/RoomPanel";
 import BuildingPanel from "../components/BuildingPanel";
 import { CAMPUSES, SCHOOL } from "../data/campuses";
 import { MAIN_BUILDING_FLOORS, FLOOR_ARTWORK_SIZE } from "../data/mainBuildingFloors";
-import { C } from "../theme";
 import mainFloor1Url from "../assets/main-building-floor1.svg?url";
 import mainFloor2Url from "../assets/main-building-floor2.svg?url";
 import mainFloor3Url from "../assets/main-building-floor3.svg?url";
@@ -43,6 +43,7 @@ export default function CampusPage() {
   const location = useLocation();
   const [room, setRoom] = useState(null);
   const [selectedBuilding, setSelectedBuilding] = useState(null);
+  const trip = useTrip();
   const campus = CAMPUSES[campusId];
   // Directions from search: { buildingId, label, next: { path, state } }
   const route = location.state?.route;
@@ -61,18 +62,10 @@ export default function CampusPage() {
   ];
 
   return (
-    <div className="min-h-screen w-full" style={{ background: C.paper, color: C.ink, fontFamily: "'IBM Plex Sans', sans-serif" }}>
-      <PageHeader crumbs={crumbs} backTo="/" backLabel="All campuses" />
-      <main className="py-5 md:py-8">
-        <div className="px-4 md:px-6 max-w-5xl mx-auto">
-          <h1 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6 text-center" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            {campus.name}
-          </h1>
-        </div>
-
-        <div className="px-4 md:px-6">
+    <AppShell crumbs={crumbs} backTo="/" backLabel="All campuses" title={campus.name}>
+        <div>
           {campus.usesFloorPlanArtwork && FLOOR_PLAN_CAMPUSES[campusId] ? (
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-7xl mx-auto">
               <FloorPlanViewer
                 buildingName={campus.name}
                 floors={FLOOR_PLAN_CAMPUSES[campusId].floors}
@@ -98,7 +91,10 @@ export default function CampusPage() {
               campusId={campusId}
               route={route}
               routeKey={location.key}
-              onEndRoute={() => navigate(location.pathname, { replace: true })}
+              onEndRoute={() => {
+                trip.end();
+                navigate(location.pathname, { replace: true });
+              }}
               onSelectBuilding={(buildingId) => {
                 const building = campus.buildings[buildingId];
                 if (route?.buildingId === buildingId && !building?.imageOnly) {
@@ -108,7 +104,10 @@ export default function CampusPage() {
                 } else if (building?.imageOnly) {
                   setSelectedBuilding({ id: buildingId, ...building });
                   // A photo-only building is the end of the route.
-                  if (route?.buildingId === buildingId) navigate(location.pathname, { replace: true });
+                  if (route?.buildingId === buildingId) {
+                    trip.arrive();
+                    navigate(location.pathname, { replace: true });
+                  }
                 } else {
                   navigate(`/campus/${campusId}/building/${buildingId}`);
                 }
@@ -116,9 +115,8 @@ export default function CampusPage() {
             />
           )}
         </div>
-      </main>
       <RoomPanel room={room} onClose={() => setRoom(null)} />
       <BuildingPanel building={selectedBuilding} onClose={() => setSelectedBuilding(null)} />
-    </div>
+    </AppShell>
   );
 }

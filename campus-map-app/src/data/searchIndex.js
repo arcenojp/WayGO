@@ -1,6 +1,18 @@
 import { CAMPUSES } from "./campuses";
 import { hasRoute } from "./rtsWalkways";
 
+// Where a result is, for the directions card (see guideSteps.js).
+function placeOf(campus, building, floors, floor) {
+  return {
+    campusName: campus.name,
+    buildingName: building?.name ?? null,
+    imageOnly: Boolean(building?.imageOnly),
+    floorLabel: floor?.label ?? null,
+    // 0 is the floor people enter on; higher floors need the stairs.
+    floorIndex: floor ? floors.findIndex((f) => f.id === floor.id) : null,
+  };
+}
+
 function buildIndex() {
   const index = [];
 
@@ -21,6 +33,7 @@ function buildIndex() {
             sublabel: `${campus.name} \u00B7 ${floor.label}`,
             path: `/campus/${campusId}`,
             state: { floorId: floor.id, roomName: room.name },
+            place: placeOf(campus, null, campus.floors, floor),
           });
         });
       });
@@ -34,6 +47,7 @@ function buildIndex() {
           sublabel: campus.name,
           path: `/campus/${campusId}/building/${buildingId}`,
           via,
+          place: placeOf(campus, building),
         });
         (building.floors || []).forEach((floor) => {
           floor.rooms.forEach((room) => {
@@ -44,6 +58,7 @@ function buildIndex() {
               path: `/campus/${campusId}/building/${buildingId}`,
               state: { floorId: floor.id, roomName: room.name },
               via,
+              place: placeOf(campus, building, building.floors, floor),
             });
           });
         });

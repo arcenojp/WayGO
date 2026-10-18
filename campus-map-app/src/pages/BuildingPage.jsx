@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import PageHeader from "../components/PageHeader";
+import AppShell from "../components/AppShell";
 import FloorPlan from "../components/FloorPlan";
 import FloorPlanViewer from "../components/FloorPlanViewer";
 import BuildingImageOnly from "../components/BuildingImageOnly";
 import RoomPanel from "../components/RoomPanel";
 import { CAMPUSES, SCHOOL } from "../data/campuses";
 import { COMPUTER_BUILDING_FLOORS, COMPUTER_BUILDING_ARTWORK_SIZE } from "../data/computerBuildingFloors";
-import { C } from "../theme";
 import { photosFor } from "../data/photos";
 import cbFloor1Url from "../assets/computer-building-floor1.svg?url";
 import cbFloor2Url from "../assets/computer-building-floor2.svg?url";
@@ -98,12 +97,7 @@ export default function BuildingPage() {
   ];
 
   return (
-    <div className="min-h-screen w-full" style={{ background: C.paper, color: C.ink, fontFamily: "'IBM Plex Sans', sans-serif" }}>
-      <PageHeader crumbs={crumbs} backTo={`/campus/${campusId}`} backLabel="Site map" />
-      <main className="px-4 py-5 md:px-6 md:py-8 max-w-5xl mx-auto">
-        <h1 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6 text-center" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-          {building.name}
-        </h1>
+    <AppShell crumbs={crumbs} backTo={`/campus/${campusId}`} backLabel="Site map" title={building.name}>
         {building.imageOnly ? (
           <BuildingImageOnly photos={photosFor(buildingId, building.photos)} />
         ) : building.usesFloorPlanArtwork && FLOOR_PLAN_BUILDINGS[buildingId] ? (
@@ -127,8 +121,7 @@ export default function BuildingPage() {
             highlightRoomName={location.state?.roomName}
           />
         )}
-      </main>
       <RoomPanel room={room} onClose={() => setRoom(null)} />
-    </div>
+    </AppShell>
   );
 }

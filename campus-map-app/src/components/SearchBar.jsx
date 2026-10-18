@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Search, MapPin, Building2, DoorOpen } from "lucide-react";
 import { search } from "../data/searchIndex";
+import { useTrip } from "./tripContext";
 import { C } from "../theme";
 
 const KIND_ICON = { campus: MapPin, building: Building2, room: DoorOpen };
@@ -12,7 +13,7 @@ export default function SearchBar() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const containerRef = useRef(null);
   const navigate = useNavigate();
-  const location = useLocation();
+  const trip = useTrip();
   const results = search(query);
 
   useEffect(() => {
@@ -28,23 +29,10 @@ export default function SearchBar() {
   function goTo(entry) {
     setQuery("");
     setOpen(false);
-    const fromElsewhere = location.pathname !== entry.path;
-    if (entry.via && fromElsewhere) {
-      // Walk there on the campus map first; the building page comes next.
-      navigate(entry.via.campusPath, {
-        state: {
-          route: {
-            buildingId: entry.via.buildingId,
-            label: entry.kind === "room" ? entry.label : null,
-            next: { path: entry.path, state: entry.state },
-          },
-        },
-      });
-      return;
-    }
-    // Coming from another page means entering the building, so the floor
-    // plan starts at the entrance floor and points to the stairs.
-    navigate(entry.path, { state: { ...entry.state, guide: fromElsewhere } });
+    // Rooms and buildings first show the steps to get there (TripProvider);
+    // a campus just opens.
+    if (entry.kind === "campus") navigate(entry.path);
+    else trip.preview(entry);
   }
 
   function onKeyDown(e) {
