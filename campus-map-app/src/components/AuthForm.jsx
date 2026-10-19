@@ -19,7 +19,7 @@ export function AuthLayout({ subtitle, children, footer }) {
             {subtitle}
           </p>
         </div>
-        <div className="rounded-lg md:rounded-xl border p-5 sm:p-6 md:p-8 lg:p-10 shadow-sm" style={{ background: "#FFFFFF", borderColor: C.line }}>
+        <div className="rounded-lg md:rounded-xl border p-5 sm:p-6 md:p-8 lg:p-10 shadow-sm" style={{ background: C.surface, borderColor: C.line }}>
           {children}
           {footer && (
             <div
@@ -49,7 +49,7 @@ export function Field({ id, label, labelAside, hint, className = "", ...input })
         id={id}
         {...input}
         className="w-full rounded-md md:rounded-lg border px-3 py-2.5 md:px-4 md:py-3 text-base md:text-lg outline-none waygo-input"
-        style={{ borderColor: C.line, background: "#FFFFFF", color: C.ink }}
+        style={{ borderColor: C.line, background: C.surface, color: C.ink }}
       />
       {hint && (
         <p className="text-xs md:text-sm mt-1 md:mt-1.5" style={{ color: C.inkSoft }}>
@@ -63,7 +63,7 @@ export function Field({ id, label, labelAside, hint, className = "", ...input })
 export function FormError({ children }) {
   if (!children) return null;
   return (
-    <p role="alert" className="text-sm md:text-base mt-3" style={{ color: "#B42318" }}>
+    <p role="alert" className="text-sm md:text-base mt-3" style={{ color: C.danger }}>
       {children}
     </p>
   );

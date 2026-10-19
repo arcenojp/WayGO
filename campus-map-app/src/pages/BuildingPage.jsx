@@ -97,7 +97,7 @@ export default function BuildingPage() {
   ];
 
   return (
-    <AppShell crumbs={crumbs} backTo={`/campus/${campusId}`} backLabel="Site map" title={building.name}>
+    <AppShell crumbs={crumbs} backTo={`/campus/${campusId}`} backLabel={`${campus.name.replace(/ Campus$/, "")} map`} title={building.name}>
         {building.imageOnly ? (
           <BuildingImageOnly photos={photosFor(buildingId, building.photos)} />
         ) : building.usesFloorPlanArtwork && FLOOR_PLAN_BUILDINGS[buildingId] ? (

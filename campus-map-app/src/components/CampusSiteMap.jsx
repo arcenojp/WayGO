@@ -32,7 +32,7 @@ export default function CampusSiteMap({ campusId, onSelectBuilding, route, route
       {campus.track && (
         <>
           <ellipse cx={campus.track.cx} cy={campus.track.cy} rx={campus.track.rx} ry={campus.track.ry} fill={C.green} stroke={C.greenLine} strokeWidth="2" />
-          <ellipse cx={campus.track.cx} cy={campus.track.cy} rx={campus.track.rx - 20} ry={campus.track.ry - 20} fill={C.paper} stroke={C.greenLine} strokeWidth="1.2" />
+          <ellipse cx={campus.track.cx} cy={campus.track.cy} rx={campus.track.rx - 20} ry={campus.track.ry - 20} stroke={C.greenLine} strokeWidth="1.2" style={{ fill: C.paper }} />
         </>
       )}
       {buildings.map(([id, b]) => (
@@ -45,9 +45,8 @@ export default function CampusSiteMap({ campusId, onSelectBuilding, route, route
         >
           <path
             d={b.shape}
-            fill={hover === id ? C.accentSoft : C.stone}
-            stroke={hover === id ? C.accent : C.ink}
             strokeWidth={hover === id ? 2 : 1.2}
+            style={{ fill: hover === id ? C.accentSoft : C.stone, stroke: hover === id ? C.accent : C.ink }}
           />
           <text
             x={b.label.x}

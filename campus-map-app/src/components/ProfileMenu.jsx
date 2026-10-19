@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LayoutDashboard, LogOut } from "lucide-react";
+import { LayoutDashboard, LogOut, Moon } from "lucide-react";
 import { useAuth } from "../auth/useAuth";
 import { C } from "../theme";
+import { useTheme } from "../themeMode";
 
 const ROLE_LABEL = { student: "Student", faculty: "Faculty", staff: "Staff", admin: "Admin" };
 
@@ -20,6 +21,8 @@ export default function ProfileMenu() {
   const [loggingOut, setLoggingOut] = useState(false);
   const ref = useRef(null);
   const navigate = useNavigate();
+  const [theme, setTheme] = useTheme();
+  const dark = theme === "dark";
 
   useEffect(() => {
     if (!open) return;
@@ -58,7 +61,7 @@ export default function ProfileMenu() {
         <div
           role="menu"
           className="absolute right-0 mt-2 w-64 rounded-lg border shadow-lg overflow-hidden z-[1100]"
-          style={{ background: "#FFFFFF", borderColor: C.line }}
+          style={{ background: C.surface, borderColor: C.line }}
         >
           <div className="px-4 py-3 border-b" style={{ borderColor: C.line }}>
             <div className="font-semibold truncate">{user.name}</div>
@@ -85,6 +88,26 @@ export default function ProfileMenu() {
               Admin dashboard
             </Link>
           )}
+          <button
+            role="menuitemcheckbox"
+            aria-checked={dark}
+            onClick={() => setTheme(dark ? "light" : "dark")}
+            className="w-full flex items-center gap-2 px-4 py-3 text-sm font-medium text-left waygo-hover-tint border-b"
+            style={{ color: C.brandDark, borderColor: C.line }}
+          >
+            <Moon size={16} />
+            <span className="flex-1">Dark mode</span>
+            <span
+              aria-hidden="true"
+              className="relative w-9 h-5 rounded-full transition-colors"
+              style={{ background: dark ? C.brand : C.stoneHover }}
+            >
+              <span
+                className="absolute top-0.5 left-0.5 w-4 h-4 rounded-full shadow transition-transform"
+                style={{ background: "#FFFFFF", transform: dark ? "translateX(16px)" : "none" }}
+              />
+            </span>
+          </button>
           <button
             role="menuitem"
             onClick={onLogout}

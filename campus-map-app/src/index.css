@@ -1,10 +1,59 @@
 @import "tailwindcss";
 
-/* Keep in sync with src/theme.js */
+/* Theme colors (see src/theme.js). The dark set applies with
+   <html data-theme="dark">, chosen in the profile menu. */
 :root {
+  color-scheme: light;
   --brand: #C331C1;
   --brand-dark: #8E1F8C;
   --brand-tint: #F8E7F7;
+  --brand-line: #E9C4E7;
+  --c-paper: #FBF9FB;
+  --c-paper-dark: #F2EEF3;
+  --c-surface: #FFFFFF;
+  --c-ink: #231A29;
+  --c-ink-soft: #6D6475;
+  --c-line: #E3DBE5;
+  --c-stone: #E9E4EB;
+  --c-stone-hover: #DDD5E0;
+  --c-danger: #B42318;
+  --c-danger-line: #F3C4C0;
+  --status-approved-bg: #E7F6EC;
+  --status-approved-fg: #1E7A3E;
+  --status-pending-bg: #FFF4DE;
+  --status-pending-fg: #8A5A00;
+  --status-blocked-bg: #FDECEC;
+  --status-blocked-fg: #B42318;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  /* Soft charcoal greys like Google's dark theme (Chrome, Gmail, Maps)
+     rather than near-black. The maps themselves stay light. */
+  --brand-dark: #F0A9EE;
+  --brand-tint: #463448;
+  --brand-line: #74466F;
+  --c-paper: #202124;
+  --c-paper-dark: #2A2B2F;
+  --c-surface: #2D2E31;
+  --c-ink: #E8EAED;
+  --c-ink-soft: #A8ADB4;
+  --c-line: #44474C;
+  --c-stone: #35363A;
+  --c-stone-hover: #44474C;
+  --c-danger: #F28B82;
+  --c-danger-line: #6E3B37;
+  --status-approved-bg: #1E3A2A;
+  --status-approved-fg: #81C995;
+  --status-pending-bg: #42361A;
+  --status-pending-fg: #FDD663;
+  --status-blocked-bg: #46292A;
+  --status-blocked-fg: #F28B82;
+}
+
+body {
+  background: var(--c-paper);
+  color: var(--c-ink);
 }
 
 :focus-visible {

@@ -35,7 +35,7 @@ export default function TripPanel() {
               <span
                 className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold"
                 style={{
-                  background: done || now ? C.brand : "#FFFFFF",
+                  background: done || now ? C.brand : C.surface,
                   color: done || now ? "#FFFFFF" : C.brandDark,
                   border: `1.5px solid ${C.brand}`,
                 }}

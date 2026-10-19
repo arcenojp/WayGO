@@ -1,5 +1,5 @@
 import L from "leaflet";
-import { C } from "../theme";
+import { C, RAW } from "../theme";
 
 // Map markers and styles shared by the RTS map and the floor plans.
 // Animations live in index.css (waygo-heartbeat, waygo-arrow, waygo-route-flow).
@@ -23,7 +23,7 @@ export const START_ICON = L.divIcon({
   className: "waygo-pin",
   iconSize: [34, 44],
   iconAnchor: [17, 42],
-  html: `<svg width="34" height="44" viewBox="0 0 34 44"><path d="M17 1C8.2 1 1 8 1 16.8 1 28.5 17 43 17 43s16-14.5 16-26.2C33 8 25.8 1 17 1z" fill="${C.brandDark}" stroke="#FFFFFF" stroke-width="2"/><circle cx="17" cy="16.5" r="6" fill="#FFFFFF"/></svg>`,
+  html: `<svg width="34" height="44" viewBox="0 0 34 44"><path d="M17 1C8.2 1 1 8 1 16.8 1 28.5 17 43 17 43s16-14.5 16-26.2C33 8 25.8 1 17 1z" fill="${RAW.brandDark}" stroke="#FFFFFF" stroke-width="2"/><circle cx="17" cy="16.5" r="6" fill="#FFFFFF"/></svg>`,
 });
 
 export const targetStyle = {

@@ -5,7 +5,7 @@ import { C } from "../theme";
 export default function RouteBanner({ children, onClose }) {
   return (
     <div className="absolute top-2 left-12 right-2 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:max-w-lg z-[1000] flex items-start gap-2 rounded-md px-3 py-2 text-sm shadow-md"
-      style={{ background: "#FFFFFF", border: `1px solid ${C.brandLine}`, color: C.ink }}
+      style={{ background: C.surface, border: `1px solid ${C.brandLine}`, color: C.ink }}
       role="status"
     >
       <Navigation size={18} className="shrink-0 mt-0.5" style={{ color: C.brand }} />

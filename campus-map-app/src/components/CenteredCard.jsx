@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
-import { C } from "../theme";
+import { C, RAW } from "../theme";
 
 /**
  * Modal card centered over a dimmed backdrop. Closes with the X button,
@@ -32,7 +32,7 @@ export default function CenteredCard({ onClose, label, width = "max-w-md", child
         aria-modal="true"
         aria-label={label}
         className={`relative w-full ${width} max-h-[90dvh] overflow-y-auto p-5 md:p-6 rounded-xl shadow-2xl`}
-        style={{ background: C.ink, color: C.paper, borderTop: `4px solid ${C.brand}` }}
+        style={{ background: RAW.ink, color: RAW.paper, borderTop: `4px solid ${C.brand}` }}
         onClick={(e) => e.stopPropagation()}
       >
         <button

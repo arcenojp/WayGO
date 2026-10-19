@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import rtsMapUrl from "../assets/rts-campus-map.svg?url";
 import { BUILDING_SHAPES, RTS_MAP_SIZE } from "../data/rtsBuildingShapes";
 import { routeToBuilding } from "../data/rtsWalkways";
-import { C } from "../theme";
+import { C, RAW } from "../theme";
 import { useFillViewport, SyncMapSize, KeepShapesAligned } from "./useFillViewport";
 import { useExpandable, EXPANDED_CLASS } from "./useExpandable";
 import { START_ICON, targetStyle, addClass, arrowFor, fitSmoothly } from "./wayfinding";
@@ -126,7 +126,7 @@ export default function RtsCampusMap({ onSelectBuilding, route, routeKey, onEndR
         zoomSnap={0}
         // Up to 2x the drawing's own size; closer shows no more detail.
         maxZoom={1}
-        style={{ height: "100%", width: "100%", background: C.paperDark }}
+        style={{ height: "100%", width: "100%", background: RAW.paperDark }}
       >
         <SyncMapSize height={frameHeight} />
         <KeepShapesAligned />

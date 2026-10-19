@@ -4,7 +4,7 @@ import { MapContainer, Polygon, Polyline, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Layers } from "lucide-react";
-import { C } from "../theme";
+import { C, RAW } from "../theme";
 import { useFillViewport, SyncMapSize, KeepShapesAligned } from "./useFillViewport";
 import { useExpandable, EXPANDED_CLASS } from "./useExpandable";
 import { useSidebarSlot } from "./sidebarSlot";
@@ -463,7 +463,7 @@ export default function FloorPlanViewer({
           zoomSnap={0}
           // Up to 2x the drawing's own size; closer shows no more detail.
           maxZoom={1}
-          style={{ height: "100%", width: "100%", background: C.paperDark }}
+          style={{ height: "100%", width: "100%", background: RAW.paperDark }}
         >
           <SyncMapSize height={frameHeight} />
           <KeepShapesAligned />

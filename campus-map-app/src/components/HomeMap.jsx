@@ -2,21 +2,21 @@ import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { CAMPUS_GEOJSON } from "../data/campusGeo";
-import { C } from "../theme";
+import { C, RAW } from "../theme";
 import { useFillViewport, SyncMapSize } from "./useFillViewport";
 
 // Initial view fits all campuses.
 const CAMPUS_BOUNDS = L.geoJSON(CAMPUS_GEOJSON).getBounds();
 
 const baseStyle = {
-  color: C.brandDark,
+  color: RAW.brandDark,
   weight: 1.6,
   fillColor: C.brand,
   fillOpacity: 0.35,
 };
 
 const hoverStyle = {
-  color: C.brandDark,
+  color: RAW.brandDark,
   weight: 2.5,
   fillColor: C.brand,
   fillOpacity: 0.6,
@@ -33,7 +33,7 @@ export default function HomeMap({ onSelect, minHeight = 360 }) {
       <style>{`
         .campus-label {
           background: ${C.brand};
-          border: 1px solid ${C.brandDark};
+          border: 1px solid ${RAW.brandDark};
           color: #FFFFFF;
           font-family: 'Space Grotesk', sans-serif;
           font-weight: 600;
