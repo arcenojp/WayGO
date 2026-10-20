@@ -314,7 +314,8 @@ export default function FloorPlanViewer({
       rooms: floor.rooms,
       stairs: floor.stairs,
       start: routeStart,
-      goals: focus.map((f) => f.polygon),
+      // A room that doesn't touch a corridor names the area it's entered from.
+      goals: focus.map((f) => f.approach || f.polygon),
     })
       .then((found) => {
         if (cancelled) return;
