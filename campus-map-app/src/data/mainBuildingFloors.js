@@ -199,7 +199,7 @@ export const MAIN_BUILDING_FLOORS = [
     rooms: [
       {
         id: "f2_president_s_office_0",
-        name: "President`s Office",
+        name: "President's Office",
         polygon: [[1991.1, 2161.0], [2415.0, 2161.0], [2415.0, 2539.0], [1991.1, 2539.0]],
         photos: [],
       },
@@ -331,13 +331,13 @@ export const MAIN_BUILDING_FLOORS = [
       },
       {
         id: "f2_cr_male__main_2nd_floor_30",
-        name: "CR Male (Main 2nd floor)",
+        name: "CR Male",
         polygon: [[2182.0, 1553.0], [2371.0, 1553.0], [2371.0, 1748.0], [2182.0, 1748.0]],
         photos: [],
       },
       {
         id: "f2_cr_female__main_2nd_floor_31",
-        name: "CR Female (Main 2nd floor)",
+        name: "CR Female",
         polygon: [[2182.0, 1757.0], [2371.0, 1757.0], [2371.0, 1959.0], [2182.0, 1959.0]],
         photos: [],
       },
@@ -560,13 +560,13 @@ export const MAIN_BUILDING_FLOORS = [
       },
       {
         id: "f3_cr_male__main_2nd_floor_31",
-        name: "CR Male (Main 2nd floor)",
+        name: "CR Male",
         polygon: [[2217.0, 1534.0], [2430.0, 1534.0], [2430.0, 1741.0], [2217.0, 1741.0]],
         photos: [],
       },
       {
         id: "f3_cr_female__main_2nd_floor_32",
-        name: "CR Female (Main 2nd floor)",
+        name: "CR Female",
         polygon: [[2217.0, 1756.0], [2430.0, 1756.0], [2430.0, 1960.0], [2217.0, 1960.0]],
         photos: [],
       },

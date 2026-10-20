@@ -74,8 +74,9 @@ export const MARINE_BUILDING_FLOORS = [
     label: "3rd Floor",
     artworkFile: "marine-building-floor3.svg",
     rooms: [
-      { id: "mb3_library_1", name: "Library (RTS Campus)", polygon: [[607.6, 125.6], [2293.2, 125.6], [2293.2, 1392], [607.6, 1392], [607.6, 667.2], [123.6, 667.2], [123.6, 420], [607.6, 420]], photos: [] },
-      { id: "mb3_elevator", name: "Elevator", polygon: [[123.6, 179.2], [414, 179.2], [414, 395.2], [123.6, 395.2]], photos: [] },
+      { id: "mb3_library_1", name: "Library (RTS Campus)", polygon: [[607.6, 125.6], [2293.2, 125.6], [2293.2, 1392], [607.6, 1392], [607.6, 667.2], [391.6, 667.2], [391.6, 420], [607.6, 420]], photos: [] },
+      { id: "mb3_elevator", name: "Elevator", polygon: [[273.2, 112], [570.8, 112], [570.8, 352], [273.2, 352]], photos: [] },
+      { id: "mb3_room_unlabeled", name: "Room (unlabeled)", polygon: [[84.4, 102.4], [257.2, 102.4], [257.2, 720], [84.4, 720]], photos: [] },
     ],
     stairs: [
       {

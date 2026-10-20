@@ -9,25 +9,27 @@
 //
 // Notes on the artwork:
 // - The 1st floor is the Figma redesign; floors 2-3 were drawn to match it.
-// - The small box at the north end of floors 2-3 has no label.
+// - The small box at the north end of floor 2 has no label.
+// - On floor 3 the library fills the north end.
 
 const rect = (x, y, w, h) => [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
 
 export const SENIOR_HIGH_ARTWORK_SIZE = { width: 2460, height: 1024 };
 
 // Floors 2 and 3 share one layout: the classroom row (x10 ... x01, north to
-// south), and four staircase slots, each with the flight up on the left and
-// the flight down on the right.
+// south) with the CRs (female over male) beside staircase 3, and four
+// staircase slots, each with the flight up on the left and the flight down
+// on the right.
 const ROW_TOP = 237;
 const ROW_HEIGHT = 345;
 const upperClassrooms = (floorNum) =>
   [
-    [10, 544, 135],
-    [9, 683, 135],
-    [8, 822, 135],
-    [7, 1101, 150],
-    [6, 1255, 150],
-    [5, 1409, 150],
+    [10, 484, 132],
+    [9, 620, 132],
+    [8, 756, 132],
+    [7, 1032, 132],
+    [6, 1168, 132],
+    [5, 1304, 132],
     [4, 1703, 135],
     [3, 1842, 135],
     [2, 1981, 135],
@@ -41,8 +43,20 @@ const upperClassrooms = (floorNum) =>
       photos: [],
     };
   });
+// CR Female sits behind CR Male, away from the hallway, so directions lead
+// to the CRs' shared entrance (`approach`: the whole CR block).
+const upperCRs = (floorNum) => [
+  {
+    id: `sh${floorNum}_cr_female_south`,
+    name: "CR Female",
+    polygon: rect(1440, 237, 119, 167),
+    approach: rect(1440, 237, 119, 345),
+    photos: [],
+  },
+  { id: `sh${floorNum}_cr_male_south`, name: "CR Male", polygon: rect(1440, 410, 119, 172), photos: [] },
+];
 
-const STAIR_SLOTS = [410, 967, 1569, 2126];
+const STAIR_SLOTS = [350, 898, 1569, 2126];
 const FLIGHT = { y: 120, w: 60, h: 380, gap: 4 };
 const flight = (x) => rect(x, FLIGHT.y, FLIGHT.w, FLIGHT.h);
 
@@ -93,11 +107,12 @@ export const SENIOR_HIGH_FLOORS = [
     label: "2nd Floor",
     artworkFile: "senior-high-floor2.svg",
     rooms: [
-      { id: "sh2_shs_lab_1", name: "SHS LAB-1", polygon: rect(7, 237, 393, 248), photos: [] },
+      { id: "sh2_shs_lab_2", name: "SHS LAB-2", polygon: rect(7, 237, 333, 248), photos: [] },
       { id: "sh2_room_unlabeled", name: "Room (unlabeled)", polygon: rect(7, 505, 120, 122), photos: [] },
-      { id: "sh2_shs_lab_2", name: "SHS LAB-2", polygon: rect(2, 644, 460, 258), photos: [] },
+      { id: "sh2_shs_lab_1", name: "SHS LAB-1", polygon: rect(2, 644, 460, 258), photos: [] },
       { id: "sh2_elevator", name: "Elevator", polygon: rect(496, 720, 173, 196), photos: [] },
       ...upperClassrooms(2),
+      ...upperCRs(2),
     ],
     stairs: STAIR_SLOTS.flatMap((x, i) => [
       {
@@ -121,11 +136,10 @@ export const SENIOR_HIGH_FLOORS = [
     label: "3rd Floor",
     artworkFile: "senior-high-floor3.svg",
     rooms: [
-      { id: "sh3_shs_lab_3", name: "SHS LAB-3", polygon: rect(7, 237, 393, 248), photos: [] },
-      { id: "sh3_room_unlabeled", name: "Room (unlabeled)", polygon: rect(7, 505, 120, 122), photos: [] },
-      { id: "sh3_shs_lab_4", name: "SHS LAB-4", polygon: rect(2, 644, 460, 258), photos: [] },
+      { id: "sh3_library", name: "Library", polygon: rect(7, 237, 333, 665), photos: [] },
       { id: "sh3_elevator", name: "Elevator", polygon: rect(496, 720, 173, 196), photos: [] },
       ...upperClassrooms(3),
+      ...upperCRs(3),
     ],
     // Each flight down sits over the 2nd floor's flight up.
     stairs: STAIR_SLOTS.map((x, i) => ({

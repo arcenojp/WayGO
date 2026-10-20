@@ -123,8 +123,8 @@ Only the first photo's name is shown. For more photos, change `-1` to
 | 2nd Floor | RM-214 | `f2_rm_217_25-1.jpg` |
 | 2nd Floor | RM-213 | `f2_rm_215_26-1.jpg` |
 | 2nd Floor | RM-212 | `f2_rm_213_27-1.jpg` |
-| 2nd Floor | CR Male (Main 2nd floor) | `f2_cr_male__main_2nd_floor_30-1.jpg` |
-| 2nd Floor | CR Female (Main 2nd floor) | `f2_cr_female__main_2nd_floor_31-1.jpg` |
+| 2nd Floor | CR Male | `f2_cr_male__main_2nd_floor_30-1.jpg` |
+| 2nd Floor | CR Female | `f2_cr_female__main_2nd_floor_31-1.jpg` |
 | 2nd Floor | Photo Room/DIO Office | `f2_photo_room_dio_office_32-1.jpg` |
 | 2nd Floor | HM Department Head Office | `f2_hm_department_head_office_33-1.jpg` |
 | 3rd Floor | Ladies Social Hall | `f3_ladies_social_hall_0-1.jpg` |
@@ -150,8 +150,8 @@ Only the first photo's name is shown. For more photos, change `-1` to
 | 3rd Floor | RM-317 | `f3_rm_317_26-1.jpg` |
 | 3rd Floor | RM-315 | `f3_rm_315_27-1.jpg` |
 | 3rd Floor | RM-313 | `f3_rm_313_28-1.jpg` |
-| 3rd Floor | CR Male (Main 2nd floor) | `f3_cr_male__main_2nd_floor_31-1.jpg` |
-| 3rd Floor | CR Female (Main 2nd floor) | `f3_cr_female__main_2nd_floor_32-1.jpg` |
+| 3rd Floor | CR Male | `f3_cr_male__main_2nd_floor_31-1.jpg` |
+| 3rd Floor | CR Female | `f3_cr_female__main_2nd_floor_32-1.jpg` |
 | 4th Floor | WIT Main Library | `f4_wit_main_library_1-1.jpg` |
 | 4th Floor | Elevator | `f4_elevator_2-1.jpg` |
 | 4th Floor | Room (unlabeled) | `f4_room__unlabeled_3-1.jpg` |
@@ -231,6 +231,7 @@ Only the first photo's name is shown. For more photos, change `-1` to
 | 2nd Floor | Elevator | `mb2_elevator-1.jpg` |
 | 3rd Floor | Library (RTS Campus) | `mb3_library_1-1.jpg` |
 | 3rd Floor | Elevator | `mb3_elevator-1.jpg` |
+| 3rd Floor | Room (unlabeled, beside the elevator) | `mb3_room_unlabeled-1.jpg` |
 
 ### Senior High Building (RTS Campus) → `senior-high/`
 
@@ -266,13 +267,13 @@ Only the first photo's name is shown. For more photos, change `-1` to
 | 2nd Floor | HS-207 | `sh2_hs_207-1.jpg` |
 | 2nd Floor | HS-206 | `sh2_hs_206-1.jpg` |
 | 2nd Floor | HS-205 | `sh2_hs_205-1.jpg` |
+| 2nd Floor | CR Female | `sh2_cr_female_south-1.jpg` |
+| 2nd Floor | CR Male | `sh2_cr_male_south-1.jpg` |
 | 2nd Floor | HS-204 | `sh2_hs_204-1.jpg` |
 | 2nd Floor | HS-203 | `sh2_hs_203-1.jpg` |
 | 2nd Floor | HS-202 | `sh2_hs_202-1.jpg` |
 | 2nd Floor | HS-201 | `sh2_hs_201-1.jpg` |
-| 3rd Floor | SHS LAB-4 | `sh3_shs_lab_4-1.jpg` |
-| 3rd Floor | Room (unlabeled, between the labs) | `sh3_room_unlabeled-1.jpg` |
-| 3rd Floor | SHS LAB-3 | `sh3_shs_lab_3-1.jpg` |
+| 3rd Floor | Library | `sh3_library-1.jpg` |
 | 3rd Floor | Elevator | `sh3_elevator-1.jpg` |
 | 3rd Floor | HS-310 | `sh3_hs_310-1.jpg` |
 | 3rd Floor | HS-309 | `sh3_hs_309-1.jpg` |
@@ -280,6 +281,8 @@ Only the first photo's name is shown. For more photos, change `-1` to
 | 3rd Floor | HS-307 | `sh3_hs_307-1.jpg` |
 | 3rd Floor | HS-306 | `sh3_hs_306-1.jpg` |
 | 3rd Floor | HS-305 | `sh3_hs_305-1.jpg` |
+| 3rd Floor | CR Female | `sh3_cr_female_south-1.jpg` |
+| 3rd Floor | CR Male | `sh3_cr_male_south-1.jpg` |
 | 3rd Floor | HS-304 | `sh3_hs_304-1.jpg` |
 | 3rd Floor | HS-303 | `sh3_hs_303-1.jpg` |
 | 3rd Floor | HS-302 | `sh3_hs_302-1.jpg` |
